@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block body %}
+<h1>{{ post.title }}</h1>
+<p>by {{ post.user.username }}</p>
+{{ post.body }}
+{% endblock %}
