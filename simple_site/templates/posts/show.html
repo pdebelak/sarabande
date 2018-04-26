@@ -2,6 +2,6 @@
 {% block title %}{{ post.title }}{% endblock %}
 {% block body %}
 <h1>{{ post.title }}</h1>
-<p>by {{ post.user.username }}</p>
-{{ post.body }}
+<p>by {{ post.author_name }}</p>
+{{ post.html_body }}
 {% endblock %}

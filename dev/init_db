@@ -1,4 +1,0 @@
-#! /usr/bin/env bash
-
-SITE_ENV=test venv/bin/python scripts/create_tables.py
-SITE_ENV=development venv/bin/python scripts/create_tables.py

@@ -1,0 +1,14 @@
+{% from "_form.html" import render_field %}
+{% extends "layout.html" %}
+{% block title %}Create Page{% endblock %}
+{% block body %}
+<h1>Create new page</h1>
+
+<form method="POST" action="{{ url_for('page.create') }}">
+  {{ form.csrf_token }}
+  {{ render_field(form.title) }}
+  {{ render_field(form.slug) }}
+  {{ render_field(form.body) }}
+  <button>Submit</button>
+</form>
+{% endblock %}

@@ -1,4 +1,58 @@
-body {
+html, body {
+  margin: 0;
+  font-family: Times, serif;
+  font-size: 18px;
+}
+
+.container {
   margin: 0 auto;
   max-width: 800px;
+}
+
+.header {
+  background: #0074D9;
+  font-family: Arial, sans-serif;
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+}
+
+.header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header a:hover {
+  color: #ddd;
+}
+
+.header-links {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.header-links li {
+  padding: 0 12px;
+}
+
+.logout-link {
+  background: none;
+  color: #fff;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.logout-link:hover {
+  color: #ddd;
 }

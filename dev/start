@@ -1,3 +1,0 @@
-#! /usr/bin/env bash
-
-FLASK_APP=simple_site venv/bin/flask run
