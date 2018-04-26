@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import TextField, TextAreaField
+from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired
 
 from simple_site.models import Page
 
 
 class PageForm(FlaskForm):
-    title = TextField('title', validators=[DataRequired()])
-    slug = TextField('slug')
+    title = StringField('title', validators=[DataRequired()])
+    slug = StringField('slug')
     body = TextAreaField('body', validators=[DataRequired()])
 
     def to_page(self):

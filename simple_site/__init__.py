@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager
 
 from .config import Config, BaseModel
 
@@ -18,15 +18,17 @@ csrf = CSRFProtect(app)
 login_manager = LoginManager(app)
 
 
+from .posts import index as post_index, posts as post_blueprint
+from .pages import show as page_show, pages as page_blueprint
+from .sessions import login_required, sessions as session_blueprint
+
+
 @app.route('/admin')
-@login_required
+@login_required('user')
 def admin():
     return render_template('admin.html')
 
 
-from .posts import index as post_index, posts as post_blueprint
-from .pages import show as page_show, pages as page_blueprint
-from .sessions import sessions as session_blueprint
 app.register_blueprint(post_blueprint)
 app.register_blueprint(page_blueprint)
 app.register_blueprint(session_blueprint)

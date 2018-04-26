@@ -1,0 +1,76 @@
+from simple_site.models import Page
+
+from factories import build_page, build_user
+from helpers import AppTest
+
+
+class TestPageViews(AppTest):
+    def testPageShowNotFound(self):
+        resp = self.app.get('/not-found')
+        self.assertEqual(resp.status_code, 404)
+
+    def testPageShowFound(self):
+        page = build_page()
+        self.db.session.add(page)
+        self.db.session.commit()
+        resp = self.app.get('/' + page.slug)
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(page.title.encode('utf-8') in resp.data)
+        self.assertTrue(page.body.encode('utf-8') in resp.data)
+
+    def testPageShowFoundHTMLBody(self):
+        page = build_page(body='<p>Some html</p><p>In here</p>')
+        self.db.session.add(page)
+        self.db.session.commit()
+        resp = self.app.get('/' + page.slug)
+        self.assertTrue(page.body.encode('utf-8') in resp.data)
+
+    def testPageNewNotLoggedIn(self):
+        resp = self.app.get('/pages/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageNewLoggedInCommenter(self):
+        user = build_user(user_type='commenter')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/pages/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageNewLoggedInUser(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/pages/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageNewLoggedInAdmin(self):
+        user = build_user(user_type='admin')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/pages/new')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'Create Page' in resp.data)
+
+    def testPageCreateAsUser(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages',
+                             data={'title': 'About', 'body': 'About'})
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageCreateAsAdmin(self):
+        user = build_user(user_type='admin')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages',
+                             data={'title': 'About', 'body': 'About the page'})
+        self.assert_redirected(resp, '/about')
+        page = Page.query.filter(Page.slug == 'about').first()
+        self.assertEqual(page.title, 'About')
+        self.assertEqual(page.body, 'About the page')

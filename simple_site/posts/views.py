@@ -1,9 +1,10 @@
 from flask import abort, render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 
 from simple_site import db
 from simple_site.posts import posts
 from simple_site.models import Post
+from simple_site.sessions import login_required
 from .form import PostForm
 
 
@@ -22,14 +23,14 @@ def show(slug):
 
 
 @posts.route('/posts/new', methods=['GET'])
-@login_required
+@login_required('user')
 def new():
     form = PostForm()
     return render_template('posts/new.html', form=form)
 
 
 @posts.route('/posts', methods=['POST'])
-@login_required
+@login_required('user')
 def create():
     form = PostForm()
     if form.validate():

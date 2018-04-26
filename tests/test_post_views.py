@@ -1,27 +1,16 @@
-import unittest
+from simple_site.models import Post
 
-from simple_site import app, db
-from simple_site.models import Post, User
-
-from factories import build_post
+from factories import build_post, build_user
+from helpers import AppTest
 
 
-class TestPostViews(unittest.TestCase):
-    def setUp(self):
-        db.create_all()
-        self.app = app.test_client()
-
-    def tearDown(self):
-        Post.query.delete()
-        User.query.delete()
-        db.session.commit()
-
+class TestPostViews(AppTest):
     def testPostIndex(self):
         post1 = build_post()
         post2 = build_post()
-        db.session.add(post1)
-        db.session.add(post2)
-        db.session.commit()
+        self.db.session.add(post1)
+        self.db.session.add(post2)
+        self.db.session.commit()
         resp = self.app.get('/posts')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(post1.title.encode('utf-8') in resp.data)
@@ -35,8 +24,8 @@ class TestPostViews(unittest.TestCase):
 
     def testPostShowFound(self):
         post = build_post()
-        db.session.add(post)
-        db.session.commit()
+        self.db.session.add(post)
+        self.db.session.commit()
         resp = self.app.get('/posts/' + post.slug)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(post.title.encode('utf-8') in resp.data)
@@ -45,7 +34,59 @@ class TestPostViews(unittest.TestCase):
 
     def testPostShowFoundHTMLBody(self):
         post = build_post(body='<p>Some html</p><p>In here</p>')
-        db.session.add(post)
-        db.session.commit()
+        self.db.session.add(post)
+        self.db.session.commit()
         resp = self.app.get('/posts/' + post.slug)
         self.assertTrue(post.body.encode('utf-8') in resp.data)
+
+    def testPostNewNotLoggedIn(self):
+        resp = self.app.get('/posts/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostNewLoggedInCommenter(self):
+        user = build_user(user_type='commenter')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostNewLoggedInUser(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/new')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'Create Post' in resp.data)
+
+    def testPostNewLoggedInAdmin(self):
+        user = build_user(user_type='admin')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/new')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'Create Post' in resp.data)
+
+    def testPostCreateAsCommenter(self):
+        user = build_user(user_type='commenter')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts',
+                             data={'title': 'My post', 'body': 'Posting it'})
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostCreateAsUser(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts',
+                             data={'title': 'My post', 'body': 'Posting it'})
+        self.assert_redirected(resp, '/posts/my-post')
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        self.assertEqual(post.title, 'My post')
+        self.assertEqual(post.body, 'Posting it')
+        self.assertEqual(post.user_id, user.id)

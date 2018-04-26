@@ -5,7 +5,13 @@ import unittest
 
 def run_tests():
     os.environ['SITE_ENV'] = 'test'
-    return unittest.defaultTestLoader.discover('tests')
+    import coverage
+    cov = coverage.Coverage(source=['simple_site'])
+    cov.start()
+    discovery = unittest.defaultTestLoader.discover('tests')
+    cov.stop()
+    cov.report()
+    return discovery
 
 
 setup(
@@ -24,6 +30,7 @@ setup(
     },
     tests_require=[
         'faker',
+        'coverage',
     ],
     install_requires=[
         'flask',

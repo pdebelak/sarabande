@@ -1,12 +1,15 @@
 from flask import render_template, flash, redirect
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, current_user
 
-from simple_site.sessions import sessions
+from simple_site.sessions import sessions, login_required
 from .form import LoginForm
 
 
 @sessions.route('/sessions/new', methods=['GET'])
 def login_form():
+    if current_user.is_authenticated:
+        flash('You are already logged in')
+        return redirect('/')
     form = LoginForm()
     return render_template('sessions/new.html', form=form)
 
@@ -22,7 +25,7 @@ def login():
 
 
 @sessions.route('/sessions/destroy', methods=['POST'])
-@login_required
+@login_required()
 def logout():
     logout_user()
     flash('You are logged out!')

@@ -1,9 +1,9 @@
 from flask import abort, render_template, redirect, url_for
-from flask_login import login_required
 
 from simple_site import db
 from simple_site.pages import pages
 from simple_site.models import Page
+from simple_site.sessions import login_required
 from .form import PageForm
 
 
@@ -16,14 +16,14 @@ def show(slug):
 
 
 @pages.route('/pages/new', methods=['GET'])
-@login_required
+@login_required('admin')
 def new():
     form = PageForm()
     return render_template('pages/new.html', form=form)
 
 
 @pages.route('/pages', methods=['POST'])
-@login_required
+@login_required('admin')
 def create():
     form = PageForm()
     if form.validate():
