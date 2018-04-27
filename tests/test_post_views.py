@@ -151,6 +151,8 @@ class TestPostViews(AppTest):
         self.assert_redirected(resp, '/posts/' + post.slug)
         new_post = Post.query.filter(Post.slug == slug).first()
         self.assertEqual(new_post.title, 'New title')
+        self.assertEqual(new_post.slug, post.slug)
+        self.assertEqual(new_post.body, post.body)
 
     def testPostUpdateWrongUser(self):
         user = build_user(user_type='user')
@@ -174,7 +176,7 @@ class TestPostViews(AppTest):
         self.db.session.commit()
         self.login_user(user)
         resp = self.app.post('/posts/' + slug + '/destroy')
-        self.assert_redirected(resp, '/posts')
+        self.assert_redirected(resp, '/admin')
         self.assert_flashes('Post deleted', 'success')
         post = Post.query.filter(Post.slug == slug).first()
         self.assertIsNone(post)

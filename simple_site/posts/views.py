@@ -73,4 +73,4 @@ def destroy(slug):
     db.session.delete(post)
     db.session.commit()
     flash('Post deleted', 'success')
-    return redirect(url_for('posts.index'))
+    return redirect(url_for('admin.posts'))

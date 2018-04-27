@@ -74,3 +74,83 @@ class TestPageViews(AppTest):
         page = Page.query.filter(Page.slug == 'about').first()
         self.assertEqual(page.title, 'About')
         self.assertEqual(page.body, 'About the page')
+
+    def testPageEditAsUser(self):
+        user = build_user(user_type='user')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/pages/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageEditAsAdmin(self):
+        user = build_user(user_type='admin')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/pages/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(slug.encode('utf-8') in resp.data)
+
+    def testPageUpdate(self):
+        user = build_user(user_type='admin')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        page = Page.query.filter(Page.slug == slug).first()
+        resp = self.app.post(
+            '/pages/' + slug,
+            data={'title': 'New title', 'body': page.body, 'slug': page.slug})
+        self.assert_redirected(resp, '/' + slug)
+        new_page = Page.query.filter(page.slug == slug).first()
+        self.assertEqual(new_page.title, 'New title')
+        self.assertEqual(new_page.slug, page.slug)
+        self.assertEqual(new_page.body, page.body)
+
+    def testPageUpdateNotAdmin(self):
+        user = build_user(user_type='user')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        page = Page.query.filter(Page.slug == slug).first()
+        resp = self.app.post(
+            '/pages/' + slug,
+            data={'title': 'New title', 'body': page.body, 'slug': page.slug})
+        self.assertEqual(resp.status_code, 401)
+
+    def testPageDelete(self):
+        user = build_user(user_type='admin')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages/' + slug + '/destroy')
+        self.assert_redirected(resp, '/admin/pages')
+        self.assert_flashes('Page deleted', 'success')
+        page = Page.query.filter(Page.slug == slug).first()
+        self.assertIsNone(page)
+
+    def testPageDeleteNotAdmin(self):
+        user = build_user(user_type='user')
+        page = build_page()
+        slug = page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages/' + slug + '/destroy')
+        self.assertEqual(resp.status_code, 401)

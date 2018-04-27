@@ -4,10 +4,15 @@
 /* red: #FF4136; */
 /* green: #2ECC40; */
 
-html, body {
+html {
   margin: 0;
   font-family: Palatino, Times, serif;
   font-size: 18px;
+}
+
+body {
+  margin: 0;
+  padding-bottom: 1em;
 }
 
 .container {
@@ -83,7 +88,17 @@ textarea.input {
 };
 
 .button--warning:hover {
-  background: #DD1003;
+  background: #CC1003;
+}
+
+.button--success {
+  background: #2ECC40;
+  color: #fff;
+  border: 1px solid #5FFF73;
+}
+
+.button--success:hover {
+  background: #0B9910;
 }
 
 .button--link {

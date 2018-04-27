@@ -1,0 +1,14 @@
+{% from "_form.html" import render_field %}
+{% extends "layout.html" %}
+{% block title %}Edit {{ form.title.data }}{% endblock %}
+{% block body %}
+<h1>Edit {{ form.title.data }}</h1>
+
+<form method="POST" action="{{ url_for('page.update', slug=form.slug.data) }}">
+  {{ form.csrf_token }}
+  {{ render_field(form.title, autofocus=True) }}
+  {{ render_field(form.slug) }}
+  {{ render_field(form.body) }}
+  <button class="button button--primary">Submit</button>
+</form>
+{% endblock %}

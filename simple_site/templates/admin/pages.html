@@ -1,19 +1,17 @@
 {% extends "admin/layout.html" %}
 {% block body %}
 {{ super() }}
-<p><a href="{{ url_for('page.new') }}">New page</a></p>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for page in pages %}
-    <tr>
-      <td><a href="{{ url_for('page.show', slug=page.slug) }}">{{ page.title }}</a></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<p><a href="{{ url_for('page.new') }}" class="button button--success">New page</a></p>
+{% for page in pages %}
+<div class="flex space-between">
+  <p><a href="{{ url_for('page.show', slug=page.slug) }}">{{ page.title }}</a></p>
+  <div class="flex">
+    <a href="{{ url_for('page.edit', slug=page.slug) }}" class="button">Edit</a>
+    <form action="{{ url_for('page.destroy', slug=page.slug) }}" method="POST" class="ml-1">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <button class="button button--warning">Delete</button>
+    </form>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

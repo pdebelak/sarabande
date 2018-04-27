@@ -16,3 +16,8 @@ class PageForm(FlaskForm):
             slug=self.slug.data,
             body=self.body.data,
         )
+
+    def update_page(self, page):
+        page.title = self.title.data
+        page.slug = self.slug.data
+        page.body = self.body.data
