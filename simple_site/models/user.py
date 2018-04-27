@@ -21,6 +21,9 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User {username}>'.format(username=self.username)
 
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password)
+
     def valid_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
 
@@ -38,3 +41,6 @@ class User(db.Model, UserMixin):
     @property
     def can_post(self):
         return self.authorized_for('user')
+
+    def can_edit(self, user):
+        return self.id == user.id or user.is_admin

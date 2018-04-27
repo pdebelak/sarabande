@@ -1,0 +1,16 @@
+{% from "_form.html" import render_field %}
+{% extends "layout.html" %}
+{% block title %}New Account{% endblock %}
+{% block body %}
+<h1>Create Account</h1>
+
+<form method="POST" action="{{ url_for('users.create') }}">
+  {{ form.csrf_token }}
+  {{ render_field(form.username, autofocus=True) }}
+  {{ render_field(form.password) }}
+  {% if current_user.is_authenticated and current_user.is_admin %}
+    {{ render_field(form.user_type) }}
+  {% endif %}
+  <button class="button button--primary">Submit</button>
+</form>
+{% endblock %}

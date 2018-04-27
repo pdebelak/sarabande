@@ -55,6 +55,10 @@ textarea.input {
   height: 20em;
 }
 
+select.input {
+  background: #fff;
+}
+
 .button {
   border: 1px solid #aaa;
   padding: 0.5em 1em;
@@ -133,6 +137,7 @@ textarea.input {
 
 .flex {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 

@@ -30,6 +30,16 @@ class TestSessionViews(AppTest):
         with self.app.session_transaction() as sess:
             self.assertEqual(sess['user_id'], str(user.id))
 
+    def testLoginNoPassword(self):
+        user = build_user()
+        self.db.session.add(user)
+        self.db.session.commit()
+        resp = self.app.post(
+            '/sessions',
+            data={'username': user.username, 'password': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This field is required' in resp.data)
+
     def testLoginBadUsername(self):
         resp = self.app.post(
             '/sessions',

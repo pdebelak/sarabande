@@ -1,0 +1,17 @@
+#! venv/bin/python
+
+import sys
+
+from simple_site import db
+from simple_site.models import User
+
+
+if len(sys.argv) != 3:
+    print('Usage: create_admin [username] [password]')
+
+
+username = sys.argv[1]
+password = sys.argv[2]
+user = User(username=username, password=password, user_type='admin')
+db.session.add(user)
+db.session.commit()

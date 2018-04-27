@@ -17,6 +17,7 @@ setup(
     url='',
     packages=find_packages(),
     test_suite='setup.run_tests',
+    scripts=['scripts/create_admin'],
     extras_require={
         'dev': [
             'faker',

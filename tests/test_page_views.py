@@ -75,6 +75,18 @@ class TestPageViews(AppTest):
         self.assertEqual(page.title, 'About')
         self.assertEqual(page.body, 'About the page')
 
+    def testPageCreateAsAdminMissingData(self):
+        user = build_user(user_type='admin')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages',
+                             data={'title': 'About', 'body': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This field is required' in resp.data)
+        page = Page.query.filter(Page.slug == 'about').first()
+        self.assertIsNone(page)
+
     def testPageEditAsUser(self):
         user = build_user(user_type='user')
         page = build_page()
@@ -115,6 +127,24 @@ class TestPageViews(AppTest):
         self.assertEqual(new_page.title, 'New title')
         self.assertEqual(new_page.slug, page.slug)
         self.assertEqual(new_page.body, page.body)
+
+    def testPageUpdateMissingData(self):
+        user = build_user(user_type='admin')
+        page = build_page()
+        slug = page.slug
+        old_title = page.title
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        page = Page.query.filter(Page.slug == slug).first()
+        resp = self.app.post(
+            '/pages/' + slug,
+            data={'title': '', 'body': page.body, 'slug': page.slug})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This field is required' in resp.data)
+        page = Page.query.filter(Page.slug == slug).first()
+        self.assertEqual(page.title, old_title)
 
     def testPageUpdateNotAdmin(self):
         user = build_user(user_type='user')

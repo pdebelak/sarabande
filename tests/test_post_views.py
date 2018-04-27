@@ -91,6 +91,18 @@ class TestPostViews(AppTest):
         self.assertEqual(post.body, 'Posting it')
         self.assertEqual(post.user_id, user.id)
 
+    def testPostCreateMissingData(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts',
+                             data={'title': 'My post', 'body': ''})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This field is required' in resp.data)
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        self.assertIsNone(post)
+
     def testPostEditAsCommenter(self):
         user = build_user(user_type='commenter')
         post = build_post()
@@ -153,6 +165,24 @@ class TestPostViews(AppTest):
         self.assertEqual(new_post.title, 'New title')
         self.assertEqual(new_post.slug, post.slug)
         self.assertEqual(new_post.body, post.body)
+
+    def testPostUpdateMissingData(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user)
+        slug = post.slug
+        old_title = post.title
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': '', 'body': post.body, 'slug': post.slug})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This field is required' in resp.data)
+        post = Post.query.filter(Post.slug == slug).first()
+        self.assertEqual(post.title, old_title)
 
     def testPostUpdateWrongUser(self):
         user = build_user(user_type='user')

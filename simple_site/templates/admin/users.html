@@ -1,0 +1,16 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+{{ super() }}
+{% for user in users %}
+<div class="flex space-between">
+  <p>{{ user.username }} - {{ user.user_type }}</p>
+  <div class="flex">
+    <a href="{{ url_for('users.edit', id=user.id) }}" class="button">Edit</a>
+    <form action="{{ url_for('users.destroy', id=user.id) }}" method="POST" class="ml-1">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <button class="button button--warning">Delete</button>
+    </form>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

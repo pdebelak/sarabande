@@ -5,8 +5,13 @@
   <li class="tab{% if active == 'posts' %} tab--active{% endif %}">
     <a href="{{ url_for('admin.posts') }}" class="unstyled-link">Posts</a>
   </li>
+  {% if current_user.is_admin %}
   <li class="tab{% if active == 'pages' %} tab--active{% endif %}">
     <a href="{{ url_for('admin.pages') }}" class="unstyled-link">Pages</a>
   </li>
+  <li class="tab{% if active == 'users' %} tab--active{% endif %}">
+    <a href="{{ url_for('admin.users') }}" class="unstyled-link">Users</a>
+  </li>
+  {% endif %}
 </ul>
 {% endblock %}

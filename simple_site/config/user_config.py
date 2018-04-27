@@ -2,7 +2,7 @@ import os
 import yaml
 
 
-class UserConfig:
+class UserConfig(object):
     def __init__(self, user_config):
         self.user_config = user_config
 

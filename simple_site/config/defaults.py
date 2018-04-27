@@ -1,7 +1,7 @@
 from .user_config import user_config
 
 
-class Defaults:
+class Defaults(object):
     DEBUG = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
