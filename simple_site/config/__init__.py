@@ -6,7 +6,7 @@ from .production import Production
 from .base_model import BaseModel
 
 
-ENV = os.getenv('SITE_ENV', 'development')
+ENV = os.getenv('FLASK_ENV', 'development')
 
 
 _configs = {

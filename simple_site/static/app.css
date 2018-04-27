@@ -1,6 +1,6 @@
 /* colors: */
-/* blue: #0074D9; */
-/* primary: blue; */
+/* purple: #B10DC9; */
+/* primary: purple; */
 /* red: #FF4136; */
 /* green: #2ECC40; */
 
@@ -21,7 +21,7 @@ body {
 }
 
 .bg--primary {
-  background: #0074D9;
+  background: #B10DC9;
   color: #fff;
 }
 
@@ -76,13 +76,13 @@ select.input {
 }
 
 .button--primary {
-  background: #0074D9;
+  background: #B10DC9;
   color: #fff;
-  border: 1px solid #33A7FC;
+  border: 1px solid #E43FFC;
 }
 
 .button--primary:hover {
-  background: #0041A6;
+  background: #800A96;
 }
 
 .button--warning {

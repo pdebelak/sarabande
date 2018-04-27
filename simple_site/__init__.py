@@ -1,10 +1,11 @@
 import re
 
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
+from flask_compress import Compress
 
 from .config import Config, BaseModel
 
@@ -12,6 +13,7 @@ from .config import Config, BaseModel
 app = Flask(__name__)
 app.config.from_object(Config)
 
+Compress(app)
 db = SQLAlchemy(app, model_class=BaseModel)
 bcrypt = Bcrypt(app)
 csrf = CSRFProtect(app)

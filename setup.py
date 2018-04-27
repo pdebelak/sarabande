@@ -5,6 +5,8 @@ import unittest
 
 def run_tests():
     os.environ['SITE_ENV'] = 'test'
+    from simple_site import db
+    db.create_all()
     return unittest.defaultTestLoader.discover('tests')
 
 
@@ -35,6 +37,7 @@ setup(
         'flask-wtf',
         'flask-bcrypt',
         'flask-login',
+        'flask-compress',
         'pyyaml',
         'python-slugify',
     ]

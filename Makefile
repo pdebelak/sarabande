@@ -3,7 +3,7 @@
 test: run_tests print_coverage
 
 start: venv
-	FLASK_APP=simple_site venv/bin/flask run
+	FLASK_APP=simple_site FLASK_ENV=development venv/bin/flask run
 
 setup: install_dependencies init_db
 

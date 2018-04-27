@@ -13,7 +13,6 @@ def _redirect_path(resp):
 
 class AppTest(unittest.TestCase):
     def setUp(self):
-        db.create_all()
         self.db = db
         self.app = app.test_client()
 
