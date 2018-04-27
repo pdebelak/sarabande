@@ -1,6 +1,6 @@
-{% macro render_field(field) %}
+{% macro render_field(field, autofocus=False) %}
   <p>{{ field.label }}</p>
-  <p>{{ field(**kwargs)|safe }}</p>
+  <p>{{ field(class='input', autofocus=autofocus)|safe }}</p>
   {% if field.errors %}
     <ul class=errors>
       {% for error in field.errors %}

@@ -6,9 +6,9 @@ from simple_site.models import Post
 
 
 class PostForm(FlaskForm):
-    title = StringField('title', validators=[DataRequired()])
-    slug = StringField('slug')
-    body = TextAreaField('body', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    slug = StringField('Slug')
+    body = TextAreaField('Body', validators=[DataRequired()])
 
     def to_post(self, user=None):
         return Post(

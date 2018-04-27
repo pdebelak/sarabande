@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
-{% block title %}Admin{% endblock %}
+{% extends "admin/layout.html" %}
 {% block body %}
+{{ super() }}
 <p><a href="{{ url_for('page.new') }}">New page</a></p>
 <table>
   <thead>

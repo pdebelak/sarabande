@@ -6,9 +6,9 @@
 
 <form method="POST" action="{{ url_for('posts.update', slug=form.slug.data) }}">
   {{ form.csrf_token }}
-  {{ render_field(form.title) }}
+  {{ render_field(form.title, autofocus=True) }}
   {{ render_field(form.slug) }}
   {{ render_field(form.body) }}
-  <button>Submit</button>
+  <button class="button button--primary">Submit</button>
 </form>
 {% endblock %}

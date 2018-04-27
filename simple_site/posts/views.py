@@ -72,5 +72,5 @@ def destroy(slug):
         return login_manager.unauthorized()
     db.session.delete(post)
     db.session.commit()
-    flash('Post deleted')
+    flash('Post deleted', 'success')
     return redirect(url_for('posts.index'))

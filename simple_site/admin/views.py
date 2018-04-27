@@ -7,19 +7,13 @@ from simple_site.models import Post, Page
 
 @admin.route('/admin')
 @login_required('user')
-def index():
-    return render_template('admin/index.html')
-
-
-@admin.route('/admin/posts')
-@login_required('user')
 def posts():
     posts = Post.query.all()
-    return render_template('admin/posts.html', posts=posts)
+    return render_template('admin/posts.html', posts=posts, active='posts')
 
 
 @admin.route('/admin/pages')
 @login_required('admin')
 def pages():
     pages = Page.query.all()
-    return render_template('admin/pages.html', pages=pages)
+    return render_template('admin/pages.html', pages=pages, active='pages')

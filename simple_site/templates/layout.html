@@ -14,35 +14,37 @@
     <![endif]-->
   </head>
   <body>
-    <header class="header">
-      <div class="container">
-        <h1 class="header-brand"><a href="/">{{ config.TITLE }}</a></h1>
-        <nav class="header-nav">
-          <ul class="header-links">
+    <header class="bg--primary">
+      <div class="flex container">
+        <h1 class="mr-1"><a href="/" class="unstyled-link text-white">{{ config.TITLE }}</a></h1>
+        <nav class="flex space-between flex-grow">
+          <ul class="unstyled-list flex">
             {% for link in config.NAV_LINKS %}
-            <li><a href="{{ link.link }}">{{ link.name }}</a></li>
+            <li class="mr-1"><a href="{{ link.link }}" class="unstyled-link text-white">{{ link.name }}</a></li>
             {% endfor %}
           </ul>
-          <ul class="header-links">
-            {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
-            <li>
+          <ul class="unstyled-list flex">
+             {% if current_user.is_authenticated %}
+              {% if current_user.can_post %}
+                <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-white">Admin</a></li>
+              {% endif %}
+            <li class="mr-1">
               <form action="{{ url_for('sessions.logout') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <button class="logout-link">Logout</button>
+                <button class="button button--link text-white">Logout</button>
               </form>
             </li>
             {% else %}
-            <li><a href="{{ url_for('sessions.login_form') }}">Login</a></li>
+            <li class="mr-1"><a href="{{ url_for('sessions.login_form') }}" class="unstyled-link text-white">Login</a></li>
             {% endif %}
           </ul>
         </nav>
       </div>
     </header>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
-        {% for message in messages %}
-        <section class="flash">
+        {% for category, message in messages %}
+        <section class="bg--{{category}} ptb-1">
           <div class="container">
             {{ message }}
           </div>

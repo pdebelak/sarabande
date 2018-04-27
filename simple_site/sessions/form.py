@@ -6,8 +6,8 @@ from simple_site.models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
     def validate(self):
         if not super(LoginForm, self).validate():

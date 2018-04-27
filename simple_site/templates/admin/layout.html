@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Admin{% endblock %}
+{% block body %}
+<ul class="unstyled-list flex tabs">
+  <li class="tab{% if active == 'posts' %} tab--active{% endif %}">
+    <a href="{{ url_for('admin.posts') }}" class="unstyled-link">Posts</a>
+  </li>
+  <li class="tab{% if active == 'pages' %} tab--active{% endif %}">
+    <a href="{{ url_for('admin.pages') }}" class="unstyled-link">Pages</a>
+  </li>
+</ul>
+{% endblock %}

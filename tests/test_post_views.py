@@ -175,7 +175,7 @@ class TestPostViews(AppTest):
         self.login_user(user)
         resp = self.app.post('/posts/' + slug + '/destroy')
         self.assert_redirected(resp, '/posts')
-        self.assert_flashes('Post deleted')
+        self.assert_flashes('Post deleted', 'success')
         post = Post.query.filter(Post.slug == slug).first()
         self.assertIsNone(post)
 

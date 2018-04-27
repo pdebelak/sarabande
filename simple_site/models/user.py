@@ -9,11 +9,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String, unique=True, nullable=False, index=True)
     user_type = db.Column(db.String, nullable=False, default='commenter')
     password_hash = db.Column(db.String, nullable=False)
-    USER_LEVELS = {
-        'commenter': 0,
-        'user': 1,
-        'admin': 2,
-    }
+    USER_LEVELS = ['admin', 'user', 'commenter']
 
     def __init__(self, *args, **kwargs):
         if 'password' in kwargs:
@@ -29,12 +25,16 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def authorized_for(self, user_type):
-        return self.USER_LEVELS[self.user_type] >= self.USER_LEVELS[user_type]
+        for level in self.USER_LEVELS:
+            if level == self.user_type:
+                return True
+            if level == user_type:
+                return False
 
     @property
     def is_admin(self):
         return self.user_type == 'admin'
 
     @property
-    def is_commenter(self):
-        return self.user_type == 'commenter'
+    def can_post(self):
+        return self.authorized_for('user')

@@ -14,7 +14,8 @@ class TestSessionViews(AppTest):
         self.db.session.commit()
         self.login_user(user)
         resp = self.app.get('/sessions/new')
-        self.assertEqual(resp.status_code, 302)
+        self.assert_redirected(resp, '/')
+        self.assert_flashes('You are already logged in', 'error')
 
     def testLoginValidData(self):
         password = 'testpassword'
@@ -25,7 +26,7 @@ class TestSessionViews(AppTest):
             '/sessions',
             data={'username': user.username, 'password': password})
         self.assert_redirected(resp, '/')
-        self.assert_flashes('You are logged in!')
+        self.assert_flashes('You are logged in!', 'success')
         with self.app.session_transaction() as sess:
             self.assertEqual(sess['user_id'], str(user.id))
 
@@ -55,6 +56,6 @@ class TestSessionViews(AppTest):
             sess['user_id'] = user.get_id()
         resp = self.app.post('/sessions/destroy')
         self.assert_redirected(resp, '/')
-        self.assert_flashes('You are logged out!')
+        self.assert_flashes('You are logged out!', 'success')
         with self.app.session_transaction() as sess:
             self.assertEqual(sess.get('user_id'), None)

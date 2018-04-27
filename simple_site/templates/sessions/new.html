@@ -6,8 +6,8 @@
 
 <form method="POST" action="{{ url_for('sessions.login') }}">
   {{ form.csrf_token }}
-  {{ render_field(form.username) }}
+  {{ render_field(form.username, autofocus=True) }}
   {{ render_field(form.password) }}
-  <button>Login</button>
+  <button class="button button--primary">Login</button>
 </form>
 {% endblock %}

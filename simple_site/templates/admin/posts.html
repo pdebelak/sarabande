@@ -1,28 +1,17 @@
-{% extends "layout.html" %}
-{% block title %}Admin{% endblock %}
+{% extends "admin/layout.html" %}
 {% block body %}
+{{ super() }}
 <p><a href="{{ url_for('posts.new') }}">New post</a></p>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for post in posts %}
-    <tr>
-      <td><a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></td>
-      <td><a href="{{ url_for('posts.edit', slug=post.slug) }}">Edit</a></td>
-      <td>
-        <form action="{{ url_for('posts.destroy', slug=post.slug) }}" method="POST">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-          <button>Delete</button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% for post in posts %}
+<div class="flex space-between">
+  <p><a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></p>
+  <div class="flex">
+    <a href="{{ url_for('posts.edit', slug=post.slug) }}" class="button">Edit</a>
+    <form action="{{ url_for('posts.destroy', slug=post.slug) }}" method="POST" class="ml-1">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <button class="button button--warning">Delete</button>
+    </form>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}
