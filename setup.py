@@ -5,13 +5,7 @@ import unittest
 
 def run_tests():
     os.environ['SITE_ENV'] = 'test'
-    import coverage
-    cov = coverage.Coverage(source=['simple_site'])
-    cov.start()
-    discovery = unittest.defaultTestLoader.discover('tests')
-    cov.stop()
-    cov.report()
-    return discovery
+    return unittest.defaultTestLoader.discover('tests')
 
 
 setup(
@@ -26,6 +20,7 @@ setup(
     extras_require={
         'dev': [
             'faker',
+            'coverage',
         ]
     },
     tests_require=[

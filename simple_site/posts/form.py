@@ -17,3 +17,8 @@ class PostForm(FlaskForm):
             body=self.body.data,
             user=user,
         )
+
+    def update_post(self, post):
+        post.title = self.title.data
+        post.slug = self.slug.data
+        post.body = self.body.data

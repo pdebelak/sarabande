@@ -28,3 +28,6 @@ class Post(db.Model):
     @property
     def author_name(self):
         return self.user.username
+
+    def can_edit(self, user):
+        return user.is_admin or self.user_id == user.id

@@ -1,4 +1,4 @@
-from flask import abort, render_template, redirect, url_for
+from flask import render_template, redirect, url_for
 
 from simple_site import db
 from simple_site.pages import pages
@@ -9,9 +9,7 @@ from .form import PageForm
 
 @pages.route('/<slug>')
 def show(slug):
-    page = Page.query.filter(Page.slug == slug).first()
-    if page is None:
-        abort(404)
+    page = Page.query.filter(Page.slug == slug).first_or_404()
     return render_template('pages/show.html', page=page)
 
 

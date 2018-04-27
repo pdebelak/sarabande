@@ -90,3 +90,102 @@ class TestPostViews(AppTest):
         self.assertEqual(post.title, 'My post')
         self.assertEqual(post.body, 'Posting it')
         self.assertEqual(post.user_id, user.id)
+
+    def testPostEditAsCommenter(self):
+        user = build_user(user_type='commenter')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostEditAsAdmin(self):
+        user = build_user(user_type='admin')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(slug.encode('utf-8') in resp.data)
+
+    def testPostEditAsUserNotAuthor(self):
+        user = build_user(user_type='user')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostEditAsAuthor(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user)
+        slug = post.slug
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(slug.encode('utf-8') in resp.data)
+
+    def testPostUpdate(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user)
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': 'New title', 'body': post.body, 'slug': post.slug})
+        self.assert_redirected(resp, '/posts/' + post.slug)
+        new_post = Post.query.filter(Post.slug == slug).first()
+        self.assertEqual(new_post.title, 'New title')
+
+    def testPostUpdateWrongUser(self):
+        user = build_user(user_type='user')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': 'New title', 'body': 'New body', 'slug': 'new'})
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostDelete(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user)
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts/' + slug + '/destroy')
+        self.assert_redirected(resp, '/posts')
+        self.assert_flashes('Post deleted')
+        post = Post.query.filter(Post.slug == slug).first()
+        self.assertIsNone(post)
+
+    def testPostDeleteWrongUser(self):
+        user = build_user(user_type='user')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts/' + slug + '/destroy')
+        self.assertEqual(resp.status_code, 401)

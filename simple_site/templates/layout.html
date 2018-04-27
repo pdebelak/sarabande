@@ -16,7 +16,7 @@
   <body>
     <header class="header">
       <div class="container">
-        <h1><a href="/">{{ config.TITLE }}</a></h1>
+        <h1 class="header-brand"><a href="/">{{ config.TITLE }}</a></h1>
         <nav class="header-nav">
           <ul class="header-links">
             {% for link in config.NAV_LINKS %}
@@ -25,7 +25,7 @@
           </ul>
           <ul class="header-links">
             {% if current_user.is_authenticated %}
-            <li><a href="/admin">Admin</a></li>
+            <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
             <li>
               <form action="{{ url_for('sessions.logout') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
