@@ -6,7 +6,7 @@
 
     <title>{% block title %}{% endblock %} - {{ config.TITLE }}</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+    {{ asset_tag('app.css') }}
     {% block head %}{% endblock %}
 
     <!--[if lt IE 9]>

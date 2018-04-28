@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_compress import Compress
+from .assets import Assets
 
 from .config import Config, BaseModel
 
@@ -14,6 +15,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 Compress(app)
+Assets(app)
 db = SQLAlchemy(app, model_class=BaseModel)
 bcrypt = Bcrypt(app)
 csrf = CSRFProtect(app)

@@ -10,7 +10,7 @@ class UserConfig(object):
         try:
             return self.user_config[item]
         except KeyError:
-            raise Exception(
+            raise RuntimeError(
                 '{item} not listed in config file'.format(item=item))
 
     def get(self, item, default=None):
@@ -18,5 +18,9 @@ class UserConfig(object):
 
 
 config_filename = os.getenv('SITE_CONFIG', 'example_config.yml')
-with open(config_filename) as config_file:
-    user_config = UserConfig(yaml.load(config_file))
+try:
+    with open(config_filename) as config_file:
+        user_config = UserConfig(yaml.load(config_file))
+except IOError:
+    raise RuntimeError(
+        'Unable to open config file {file}'.format(file=config_filename))
