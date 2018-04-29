@@ -5,15 +5,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const hash = {
   'development': '',
-  'production': '[chunkhash].',
+  'production': '[hash].',
   'test': '',
-}
-
-console.log(mode);
+};
 
 module.exports = {
   entry: {
-    index: './assets/index.js',
+    app: './assets/index.js',
   },
   module: {
     rules: [
@@ -51,6 +49,6 @@ module.exports = {
   },
   plugins: [
     new ManifestPlugin(),
-    new ExtractTextPlugin({ filename: `app.${hash[mode]}css` }),
+    new ExtractTextPlugin({ filename: `[name].${hash[mode]}css` }),
   ],
 };

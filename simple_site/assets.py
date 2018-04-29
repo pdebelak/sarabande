@@ -42,7 +42,8 @@ class Assets(object):
             return os.path.join(self.asset_local_host, 'static', filename)
         else:
             try:
-                return os.path.join('/static', self.manifest[filename])
+                return os.path.join(
+                    '/static', self.manifest[filename].lstrip('/'))
             except KeyError:
                 raise RuntimeError(
                     'No manifest entry for {0}'.format(filename))
@@ -50,7 +51,8 @@ class Assets(object):
     def load_manifest(self, app):
         try:
             with app.open_resource(self.asset_manifest_path) as manifest_file:
-                self.manifest = json.loads(manifest_file)
+                self.manifest = json.loads(
+                    manifest_file.read().decode('utf-8'))
         except IOError:
             raise RuntimeError(
                 'Could not load manifest file {0}'.format(

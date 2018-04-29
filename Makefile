@@ -1,4 +1,6 @@
-.PHONY: setup test init_db console run_tests print_coverage install_python_dependencies install_js_dependencies install_dependencies
+.PHONY: setup test init_db console run_tests print_coverage \
+	install_python_dependencies install_js_dependencies \
+	install_dependencies assets
 
 test: run_tests print_coverage
 
@@ -9,6 +11,9 @@ webpack:
 	yarnpkg run dev
 
 setup: install_dependencies init_db
+
+assets: install_js_dependencies
+	rm -rf simple_site/static/* && yarnpkg run build
 
 console: venv
 	venv/bin/python

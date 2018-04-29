@@ -4,7 +4,7 @@ import unittest
 
 
 def run_tests():
-    os.environ['SITE_ENV'] = 'test'
+    os.environ['FLASK_ENV'] = 'test'
     from simple_site import db
     db.create_all()
     return unittest.defaultTestLoader.discover('tests')
