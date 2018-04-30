@@ -26,12 +26,17 @@ def create():
     return render_template('users/new.html', form=form)
 
 
-@users.route('/account/<int:id>/edit', methods=['GET'])
+@users.route('/account/edit', methods=['GET'])
 @login_required()
+def edit_self():
+    form = UserForm(obj=current_user)
+    return render_template('users/edit.html', form=form, user=current_user)
+
+
+@users.route('/account/<int:id>/edit', methods=['GET'])
+@login_required('admin')
 def edit(id):
     user = User.query.filter(User.id == id).first_or_404()
-    if not user.can_edit(current_user):
-        return login_manager.unauthorized()
     form = UserForm(obj=user)
     return render_template('users/edit.html', form=form, user=user)
 

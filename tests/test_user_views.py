@@ -65,7 +65,7 @@ class TestUserViews(AppTest):
         self.db.session.commit()
         self.login_user(user)
         user = User.query.filter(User.username == username).first()
-        resp = self.app.get('/account/' + str(user.id) + '/edit')
+        resp = self.app.get('/account/edit')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(username.encode('utf-8') in resp.data)
 

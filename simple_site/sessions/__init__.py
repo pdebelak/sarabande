@@ -15,8 +15,6 @@ def login_required(user_type='commenter'):
         def decorated_view(*args, **kwargs):
             if request.method in EXEMPT_METHODS:
                 return func(*args, **kwargs)
-            elif login_manager._login_disabled:
-                return func(*args, **kwargs)
             elif not current_user.is_authenticated \
                     or not current_user.authorized_for(user_type):
                 return login_manager.unauthorized()

@@ -44,11 +44,11 @@ module.exports = {
     port: process.env.PORT || 5001,
     host: 'localhost',
     contentBase: './simple_site/static',
-    publicPath: '/static',
+    publicPath: '/',
 		compress: true,
   },
   plugins: [
-    new ManifestPlugin(),
+    new ManifestPlugin({ publicPath: '/static/' }),
     new ExtractTextPlugin({ filename: `[name].${hash[mode]}css` }),
   ],
 };

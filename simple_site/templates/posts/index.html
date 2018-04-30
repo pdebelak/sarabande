@@ -2,9 +2,12 @@
 {% block title %}Posts{% endblock %}
 {% block body %}
 <h1>Posts</h1>
-<ul>
+<ul class="unstyled-list">
 {% for post in posts %}
-<li><a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></li>
+<li class="flex">
+  <h3 class="mr-1"><a href="{{ url_for('posts.show', slug=post.slug) }}" class="unstyled-link">{{ post.title }}</a></h3>
+  <p>by {{ post.author_name }}</p>
+</li>
 {% endfor %}
 </ul>
 {% endblock %}

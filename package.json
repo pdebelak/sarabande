@@ -6,7 +6,7 @@
   "author": "Peter Debelak",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --inline",
+    "dev": "NODE_ENV=development webpack-dev-server --inline --hot",
     "build": "NODE_ENV=production webpack -p"
   },
   "devDependencies": {
