@@ -26,11 +26,11 @@
             {% endfor %}
           </ul>
           <ul class="unstyled-list flex">
-             {% if current_user.is_authenticated %}
-              {% if current_user.can_post %}
-                <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-white">Admin</a></li>
-              {% endif %}
-            <li class="mr-1"><a href="{{ url_for('users.edit', id=current_user.id) }}" class="unstyled-link text-white">My Account</a></li>
+            {% if current_user.is_authenticated %}
+            {% if current_user.can_post %}
+              <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-white">Admin</a></li>
+            {% endif %}
+            <li class="mr-1"><a href="{{ url_for('users.edit', id=current_user.id) }}" class="unstyled-link text-white">{{ current_user.username }}</a></li>
             <li class="mr-1">
               <form action="{{ url_for('sessions.logout') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

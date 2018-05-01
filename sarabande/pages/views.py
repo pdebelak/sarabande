@@ -1,10 +1,10 @@
 from flask import render_template, redirect, url_for, flash
 from sqlalchemy.exc import IntegrityError
 
-from simple_site import db
-from simple_site.pages import pages
-from simple_site.models import Page
-from simple_site.sessions import login_required
+from sarabande import db
+from sarabande.pages import pages
+from sarabande.models import Page
+from sarabande.sessions import login_required
 from .form import PageForm
 
 

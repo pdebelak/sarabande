@@ -2,8 +2,8 @@ from io import BytesIO
 import json
 from unittest import mock
 
-from simple_site.models import Image, User
-from simple_site.images.views import ImageForm
+from sarabande.models import Image, User
+from sarabande.images.views import ImageForm
 
 from factories import build_image, build_user
 from helpers import AppTest

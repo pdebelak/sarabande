@@ -2,10 +2,10 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
-from simple_site import db, login_manager
-from simple_site.posts import posts
-from simple_site.models import Post
-from simple_site.sessions import login_required
+from sarabande import db, login_manager
+from sarabande.posts import posts
+from sarabande.models import Post
+from sarabande.sessions import login_required
 from .form import PostForm
 
 

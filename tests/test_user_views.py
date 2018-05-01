@@ -1,4 +1,4 @@
-from simple_site.models import User
+from sarabande.models import User
 
 from factories import build_user
 from helpers import AppTest

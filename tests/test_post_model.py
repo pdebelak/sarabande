@@ -1,6 +1,6 @@
 import unittest
 
-from simple_site.models import Post
+from sarabande.models import Post
 
 
 class TestPostModel(unittest.TestCase):

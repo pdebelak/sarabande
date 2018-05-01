@@ -1,6 +1,6 @@
 import unittest
 
-from simple_site.models import User
+from sarabande.models import User
 
 
 class TestUserModel(unittest.TestCase):

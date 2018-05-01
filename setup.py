@@ -1,25 +1,36 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Command
 import unittest
 
 
-def run_tests():
-    os.environ['FLASK_ENV'] = 'test'
-    from simple_site import db
-    db.create_all()
-    return unittest.defaultTestLoader.discover('tests')
+class TestCommand(Command):
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        os.environ['FLASK_ENV'] = 'test'
+        from sarabande import db
+        db.create_all()
+        suite = unittest.defaultTestLoader.discover('tests')
+        runner = unittest.TextTestRunner(verbosity=1)
+        return runner.run(suite)
 
 
 setup(
-    name='SimpleSite',
+    name='Sarabande',
     version='0.0.1',
-    description='A simple site',
+    description='A simple blog and cms.',
     author='Peter Debelak',
     author_email='pdebelak@gmail.com',
-    url='',
+    url='https://github.com/pdebelak/sarabande',
     packages=find_packages(),
-    test_suite='setup.run_tests',
     scripts=['scripts/create_admin'],
+    cmdclass={'test': TestCommand},
     extras_require={
         'dev': [
             'faker',

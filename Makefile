@@ -5,7 +5,7 @@
 test: run_tests print_coverage
 
 server: venv
-	FLASK_APP=simple_site FLASK_ENV=development venv/bin/flask run
+	FLASK_APP=sarabande FLASK_ENV=development venv/bin/flask run
 
 webpack:
 	yarnpkg run dev
@@ -13,16 +13,16 @@ webpack:
 setup: install_dependencies init_db
 
 assets: install_js_dependencies
-	rm -rf simple_site/static/* && yarnpkg run build
+	rm -rf sarabande/static/* && yarnpkg run build
 
 console: venv
 	venv/bin/python
 
 init_db: venv
-	venv/bin/python -c "__import__('simple_site').db.create_all()"
+	venv/bin/python -c "__import__('sarabande').db.create_all()"
 
 run_tests: venv
-	venv/bin/coverage run --source simple_site setup.py test
+	venv/bin/coverage run --source sarabande setup.py test
 
 print_coverage: venv
 	venv/bin/coverage report -m

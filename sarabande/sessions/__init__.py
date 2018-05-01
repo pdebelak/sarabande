@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from flask_login import current_user
 from flask_login.config import EXEMPT_METHODS
 
-from simple_site import login_manager
+from sarabande import login_manager
 
 
 sessions = Blueprint('sessions', __name__, template_folder='templates')

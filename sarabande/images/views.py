@@ -1,10 +1,10 @@
 from flask import jsonify, Response
 from flask_login import current_user
 
-from simple_site import csrf, db
-from simple_site.images import images
-from simple_site.models import Image
-from simple_site.sessions import login_required
+from sarabande import csrf, db
+from sarabande.images import images
+from sarabande.models import Image
+from sarabande.sessions import login_required
 from .form import ImageForm
 
 

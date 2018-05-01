@@ -1,9 +1,9 @@
 from flask import render_template
 from flask_login import current_user
 
-from simple_site.admin import admin
-from simple_site.sessions import login_required
-from simple_site.models import Post, Page, User
+from sarabande.admin import admin
+from sarabande.sessions import login_required
+from sarabande.models import Post, Page, User
 
 
 @admin.route('/admin')

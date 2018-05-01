@@ -1,6 +1,6 @@
 import unittest
 
-from simple_site.models import Page
+from sarabande.models import Page
 
 
 class TestPostModel(unittest.TestCase):

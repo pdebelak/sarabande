@@ -37,7 +37,7 @@ module.exports = {
     extensions: ['.js', '.css']
   },
   output: {
-    path: path.resolve(__dirname, './simple_site/static'),
+    path: path.resolve(__dirname, './sarabande/static'),
     publicPath: '/',
     filename: `[name].${hash[mode]}js`,
     chunkFilename: `[name].${hash[mode]}js`,
@@ -45,7 +45,7 @@ module.exports = {
   devServer: {
     port: process.env.PORT || 5001,
     host: 'localhost',
-    contentBase: './simple_site/static',
+    contentBase: './sarabande/static',
     publicPath: '/',
 		compress: true,
   },

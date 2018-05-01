@@ -1,6 +1,6 @@
 import unittest
 
-from simple_site.models import Image
+from sarabande.models import Image
 
 
 class TestImageModel(unittest.TestCase):

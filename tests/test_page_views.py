@@ -1,4 +1,4 @@
-from simple_site.models import Page
+from sarabande.models import Page
 
 from factories import build_page, build_user
 from helpers import AppTest

@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect
 from flask_login import login_user, logout_user, current_user
 
-from simple_site.sessions import sessions, login_required
+from sarabande.sessions import sessions, login_required
 from .form import LoginForm
 
 

@@ -2,8 +2,8 @@
 
 import sys
 
-from simple_site import db
-from simple_site.models import User
+from sarabande import db
+from sarabande.models import User
 
 
 if len(sys.argv) != 3:

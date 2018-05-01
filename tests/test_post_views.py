@@ -1,4 +1,4 @@
-from simple_site.models import Post
+from sarabande.models import Post
 
 from factories import build_post, build_user
 from helpers import AppTest

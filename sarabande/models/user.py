@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 
-from simple_site import db, bcrypt
+from sarabande import db, bcrypt
 
 
 class User(db.Model, UserMixin):

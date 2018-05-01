@@ -1,6 +1,6 @@
 from urllib.parse import quote
 
-from simple_site import db
+from sarabande import db
 
 
 class Image(db.Model):

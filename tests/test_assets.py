@@ -1,7 +1,7 @@
 import unittest
 from flask import Flask
 
-from simple_site.assets import Assets
+from sarabande.assets import Assets
 
 
 class TestAssets(unittest.TestCase):

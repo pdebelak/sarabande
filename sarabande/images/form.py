@@ -5,7 +5,7 @@ from flask_wtf.file import FileField, FileRequired
 from PIL import Image as PIL
 from werkzeug.utils import secure_filename
 
-from simple_site.models import Image
+from sarabande.models import Image
 
 
 class ImageForm(FlaskForm):

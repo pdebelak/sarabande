@@ -1,6 +1,6 @@
 from faker import Faker
 
-from simple_site.models import Post, User, Page, Image
+from sarabande.models import Post, User, Page, Image
 
 
 faker = Faker()

@@ -1,7 +1,7 @@
 from markupsafe import Markup
 from slugify import slugify
 
-from simple_site import db
+from sarabande import db
 
 
 class Page(db.Model):

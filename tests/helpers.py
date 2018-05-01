@@ -1,8 +1,8 @@
 import re
 import unittest
 
-from simple_site import app, db
-from simple_site.models import User, Post, Page, Image
+from sarabande import app, db
+from sarabande.models import User, Post, Page, Image
 
 
 def _redirect_path(resp):

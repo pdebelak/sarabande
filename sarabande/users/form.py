@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Optional
 
-from simple_site.models import User
+from sarabande.models import User
 
 
 class UserForm(FlaskForm):

@@ -1,6 +1,6 @@
-title: My Site
+title: Sarabande
 secret_key: 'PLEASE_CHANGE_THIS_NOT_SECURE'
-database_uri: 'sqlite:///site_development.sqlite3'
+database_uri: 'sqlite:///sarabande_development.sqlite3'
 home_page: 'posts#index'
 nav_links:
   - name: About
