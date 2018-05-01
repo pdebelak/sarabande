@@ -18,12 +18,25 @@ class TestUserViews(AppTest):
         self.assertTrue(user.valid_password('test'))
         self.assertEqual(user.user_type, 'commenter')
 
+    def testUserCreateDuplicateUsername(self):
+        user = build_user()
+        username = user.username
+        self.db.session.add(user)
+        self.db.session.commit()
+        resp = self.app.post(
+            '/account', data={'username': username, 'password': 'test'})
+        self.assertEqual(resp.status_code, 200)
+        user = User.query.filter(User.username == 'me').first()
+        self.assertIsNone(user)
+        self.assertTrue(b'This name has been taken.' in resp.data)
+
     def testUserCreateNoPassword(self):
         resp = self.app.post(
             '/account', data={'username': 'me', 'password': ''})
         self.assertEqual(resp.status_code, 200)
         user = User.query.filter(User.username == 'me').first()
         self.assertIsNone(user)
+        self.assertTrue(b'This field is required.' in resp.data)
 
     def testUserCreateWithUserType(self):
         resp = self.app.post(
@@ -111,6 +124,22 @@ class TestUserViews(AppTest):
             User.username == 'new username').first()
         self.assertEqual(updated_user.id, old_id)
         self.assertEqual(updated_user.password_hash, old_hash)
+
+    def testUpdateSelfUsernameTaken(self):
+        other_user = build_user()
+        other_username = other_user.username
+        user = build_user(user_type='commenter')
+        username = user.username
+        self.db.session.add(user)
+        self.db.session.add(other_user)
+        self.db.session.commit()
+        self.login_user(user)
+        user = User.query.filter(User.username == username).first()
+        resp = self.app.post(
+            '/account/' + str(user.id),
+            data={'username': other_username})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This name has been taken.' in resp.data)
 
     def testUpdateSelfNoUsername(self):
         user = build_user(user_type='commenter')

@@ -91,6 +91,20 @@ class TestPostViews(AppTest):
         self.assertEqual(post.body, 'Posting it')
         self.assertEqual(post.user_id, user.id)
 
+    def testPostCreateDuplicateSlug(self):
+        user = build_user(user_type='user')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts',
+            data={'title': 'My post', 'body': 'Posting it', 'slug': slug})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This slug is taken.' in resp.data)
+
     def testPostCreateMissingData(self):
         user = build_user(user_type='user')
         self.db.session.add(user)
@@ -165,6 +179,24 @@ class TestPostViews(AppTest):
         self.assertEqual(new_post.title, 'New title')
         self.assertEqual(new_post.slug, post.slug)
         self.assertEqual(new_post.body, post.body)
+
+    def testPostUpdateDuplicateSlug(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user)
+        other_post = build_post()
+        slug = post.slug
+        other_slug = other_post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.add(other_post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': 'New title', 'body': post.body, 'slug': other_slug})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This slug is taken.' in resp.data)
 
     def testPostUpdateMissingData(self):
         user = build_user(user_type='user')

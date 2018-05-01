@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, flash
 from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
 
 from simple_site import db, login_manager
 from simple_site.posts import posts
@@ -33,9 +34,13 @@ def create():
     form = PostForm()
     if form.validate():
         post = form.to_post(user=current_user)
-        db.session.add(post)
-        db.session.commit()
-        return redirect(url_for('posts.show', slug=post.slug))
+        try:
+            db.session.add(post)
+            db.session.commit()
+            return redirect(url_for('posts.show', slug=post.slug))
+        except IntegrityError:
+            db.session.rollback()
+            form.slug.errors.append('This slug is taken.')
     return render_template('posts/new.html', form=form)
 
 
@@ -58,9 +63,13 @@ def update(slug):
     form = PostForm()
     if form.validate():
         form.update_post(post)
-        db.session.add(post)
-        db.session.commit()
-        return redirect(url_for('posts.show', slug=post.slug))
+        try:
+            db.session.add(post)
+            db.session.commit()
+            return redirect(url_for('posts.show', slug=post.slug))
+        except IntegrityError:
+            db.session.rollback()
+            form.slug.errors.append('This slug is taken.')
     return render_template('posts/edit.html', form=form)
 
 

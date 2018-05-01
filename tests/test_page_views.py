@@ -75,6 +75,18 @@ class TestPageViews(AppTest):
         self.assertEqual(page.title, 'About')
         self.assertEqual(page.body, 'About the page')
 
+    def testPageCreateDuplicateSlug(self):
+        user = build_user(user_type='admin')
+        page = build_page(slug='about')
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/pages',
+                             data={'title': 'About', 'body': 'About the page'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This slug is taken.' in resp.data)
+
     def testPageCreateAsAdminMissingData(self):
         user = build_user(user_type='admin')
         self.db.session.add(user)
@@ -127,6 +139,24 @@ class TestPageViews(AppTest):
         self.assertEqual(new_page.title, 'New title')
         self.assertEqual(new_page.slug, page.slug)
         self.assertEqual(new_page.body, page.body)
+
+    def testPageUpdateDuplicateSlug(self):
+        user = build_user(user_type='admin')
+        page = build_page()
+        other_page = build_page()
+        slug = page.slug
+        other_slug = other_page.slug
+        self.db.session.add(user)
+        self.db.session.add(page)
+        self.db.session.add(other_page)
+        self.db.session.commit()
+        self.login_user(user)
+        page = Page.query.filter(Page.slug == slug).first()
+        resp = self.app.post(
+            '/pages/' + slug,
+            data={'title': 'New title', 'body': page.body, 'slug': other_slug})
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'This slug is taken.' in resp.data)
 
     def testPageUpdateMissingData(self):
         user = build_user(user_type='admin')

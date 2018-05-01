@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash
+from sqlalchemy.exc import IntegrityError
 
 from simple_site import db
 from simple_site.pages import pages
@@ -26,9 +27,13 @@ def create():
     form = PageForm()
     if form.validate():
         page = form.to_page()
-        db.session.add(page)
-        db.session.commit()
-        return redirect(url_for('page.show', slug=page.slug))
+        try:
+            db.session.add(page)
+            db.session.commit()
+            return redirect(url_for('page.show', slug=page.slug))
+        except IntegrityError:
+            db.session.rollback()
+            form.slug.errors.append('This slug is taken.')
     return render_template('posts/new.html', form=form)
 
 
@@ -46,10 +51,14 @@ def update(slug):
     page = Page.query.filter(Page.slug == slug).first_or_404()
     form = PageForm()
     if form.validate():
-        form.update_page(page)
-        db.session.add(page)
-        db.session.commit()
-        return redirect(url_for('page.show', slug=page.slug))
+        try:
+            form.update_page(page)
+            db.session.add(page)
+            db.session.commit()
+            return redirect(url_for('page.show', slug=page.slug))
+        except IntegrityError:
+            db.session.rollback()
+            form.slug.errors.append('This slug is taken.')
     return render_template('pages/edit.html', form=form)
 
 

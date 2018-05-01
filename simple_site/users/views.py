@@ -1,5 +1,6 @@
 from flask import render_template, redirect, flash
 from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
 
 from simple_site import db, login_manager
 from simple_site.users import users
@@ -19,10 +20,14 @@ def create():
     form = UserForm()
     if form.validate(current_user):
         user = form.to_user()
-        db.session.add(user)
-        db.session.commit()
-        flash('Account created!', 'success')
-        return redirect('/')
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Account created!', 'success')
+            return redirect('/')
+        except IntegrityError:
+            db.session.rollback()
+            form.username.errors.append('This name has been taken.')
     return render_template('users/new.html', form=form)
 
 
@@ -50,10 +55,14 @@ def update(id):
     form = UserForm()
     if form.validate(current_user, user):
         form.update_user(user)
-        db.session.add(user)
-        db.session.commit()
-        flash('Account updated!', 'success')
-        return redirect('/')
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Account updated!', 'success')
+            return redirect('/')
+        except IntegrityError:
+            db.session.rollback()
+            form.username.errors.append('This name has been taken.')
     return render_template('users/edit.html', form=form, user=user)
 
 
