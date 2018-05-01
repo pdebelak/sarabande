@@ -9,11 +9,14 @@
     {{ asset_tag('app.css') }}
     {% block head %}{% endblock %}
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <![endif]-->
   </head>
   <body>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
     <header class="bg--primary">
       <div class="flex container">
         <h1 class="mr-1"><a href="/" class="unstyled-link text-white">{{ config.TITLE }}</a></h1>
@@ -57,5 +60,6 @@
       {% block body %}
       {% endblock %}
     </section>
+    {{ asset_tag('app.js') }}
   </body>
 </html>

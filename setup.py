@@ -40,5 +40,6 @@ setup(
         'flask-compress',
         'pyyaml',
         'python-slugify',
+        'pillow',
     ]
 )

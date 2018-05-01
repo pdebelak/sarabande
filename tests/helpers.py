@@ -2,7 +2,7 @@ import re
 import unittest
 
 from simple_site import app, db
-from simple_site.models import User, Post, Page
+from simple_site.models import User, Post, Page, Image
 
 
 def _redirect_path(resp):
@@ -20,6 +20,7 @@ class AppTest(unittest.TestCase):
         User.query.delete()
         Page.query.delete()
         Post.query.delete()
+        Image.query.delete()
         self.db.session.commit()
 
     def login_user(self, user):

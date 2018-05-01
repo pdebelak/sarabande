@@ -12,6 +12,7 @@ const hash = {
 module.exports = {
   entry: {
     app: './assets/index.js',
+    admin: './assets/admin.js',
   },
   module: {
     rules: [
@@ -23,9 +24,10 @@ module.exports = {
         },
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: ExtractTextPlugin.extract({
           use: ['css-loader', 'sass-loader'],
+          fallback: 'style-loader',
         })
       },
     ],

@@ -16,7 +16,7 @@ $font-size: 18px;
 
 html {
   margin: 0;
-  font-family: Palatino, Times, serif;
+  font-family: Times, serif;
   font-size: $font-size;
 }
 
@@ -145,6 +145,10 @@ select.input {
 
 .space-between {
   justify-content: space-between;
+}
+
+.flex-end {
+  justify-content: flex-end;
 }
 
 .flex-grow {

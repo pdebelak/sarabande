@@ -1,6 +1,6 @@
 from faker import Faker
 
-from simple_site.models import Post, User, Page
+from simple_site.models import Post, User, Page, Image
 
 
 faker = Faker()
@@ -28,9 +28,20 @@ def build_post(**kwargs):
     }
     return _build_model(Post, defaults, kwargs)
 
+
 def build_page(**kwargs):
     defaults = {
         'title': faker.sentence(),
         'body': faker.text(),
     }
     return _build_model(Page, defaults, kwargs)
+
+
+def build_image(**kwargs):
+    defaults = {
+        'name': 'image.png',
+        'mimetype': 'images/png',
+        'image': b'image-data',
+        'user': build_user(),
+    }
+    return _build_model(Image, defaults, kwargs)

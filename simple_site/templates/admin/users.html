@@ -1,6 +1,7 @@
 {% extends "admin/layout.html" %}
 {% block body %}
 {{ super() }}
+<p class="flex flex-end"><a href="{{ url_for('users.new') }}" class="button button--success">New user</a></p>
 {% for user in users %}
 <div class="flex space-between">
   <p>{{ user.username }} - {{ user.user_type }}</p>
