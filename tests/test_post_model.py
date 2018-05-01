@@ -15,3 +15,7 @@ class TestPostModel(unittest.TestCase):
     def testSlugAutoSetBlank(self):
         post = Post(title='Hello There!', slug='')
         self.assertEqual(post.slug, 'hello-there')
+
+    def testRepr(self):
+        post = Post(title='Hello There!')
+        self.assertEqual(str(post), '<Post Hello There!>')

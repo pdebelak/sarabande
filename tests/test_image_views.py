@@ -28,6 +28,14 @@ class TestImageViews(AppTest):
         self.assertEqual(resp.headers['cache-control'], 'max-age=2000000')
         self.assertEqual(resp.headers['content-type'], image.mimetype)
 
+    def testImageShowFoundSpaceInName(self):
+        image = build_image(name='I have space.png', image=b'space town')
+        self.db.session.add(image)
+        self.db.session.commit()
+        resp = self.app.get(image.url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(image.image, resp.data)
+
     def testImageCreateCommenter(self):
         user = build_user(user_type='commenter')
         self.db.session.add(user)

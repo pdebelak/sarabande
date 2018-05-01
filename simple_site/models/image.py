@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from simple_site import db
 
 
@@ -15,4 +17,5 @@ class Image(db.Model):
 
     @property
     def url(self):
-        return '/images/{id}/{name}'.format(id=self.id, name=self.name)
+        return '/images/{id}/{name}'.format(
+            id=self.id, name=quote(self.name, safe=''))

@@ -12,3 +12,7 @@ class TestUserModel(unittest.TestCase):
         user = User(password='hello')
         self.assertTrue(user.valid_password('hello'))
         self.assertFalse(user.valid_password('goodbye'))
+
+    def testRepr(self):
+        user = User(username='Peter Pebelak')
+        self.assertEqual(str(user), '<User Peter Pebelak>')
