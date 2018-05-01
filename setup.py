@@ -29,7 +29,7 @@ setup(
     author_email='pdebelak@gmail.com',
     url='https://github.com/pdebelak/sarabande',
     packages=find_packages(),
-    scripts=['scripts/create_admin'],
+    scripts=['scripts/create_admin', 'scripts/run_server'],
     cmdclass={'test': TestCommand},
     extras_require={
         'dev': [
@@ -44,13 +44,13 @@ setup(
     install_requires=[
         'flask',
         'flask-bcrypt',
+        'flask-compress',
+        'flask-login',
         'flask-sqlalchemy',
         'flask-wtf',
-        'flask-bcrypt',
-        'flask-login',
-        'flask-compress',
-        'pyyaml',
-        'python-slugify',
         'pillow',
+        'python-slugify',
+        'pyyaml',
+        'uwsgi',
     ]
 )
