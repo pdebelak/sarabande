@@ -48,6 +48,7 @@
       {% if messages %}
         {% for category, message in messages %}
         <section class="bg--{{category}} ptb-1">
+          <span class="float-right mr-1" data-close-button></span>
           <div class="container">
             {{ message }}
           </div>

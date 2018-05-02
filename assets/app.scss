@@ -5,8 +5,8 @@ $red: #EA2233;
 $green: #26A58F;
 $white: #FFF;
 $black: #000;
-$light-gray: #CCC;
-$dark-gray: #DDD;
+$light-gray: #DDD;
+$dark-gray: #CCC;
 $primary: $aqua;
 $secondary: $purple;
 $success: $green;
@@ -82,7 +82,7 @@ select.input {
 }
 
 .button:hover {
-  background: $dark-gray;
+  background: $light-gray;
 }
 
 @mixin colored-button($color) {
@@ -114,8 +114,24 @@ select.input {
   color: inherit;
 }
 
+.close-button {
+  cursor: pointer;
+  background: rgba($light-gray, 0.5);
+  border-radius: 100%;
+
+  &:hover {
+    background: rgba($dark-gray, 0.5);
+  }
+
+  &:before {
+    padding: 0.5em;
+    content: 'x';
+    font-family: monospace;
+  }
+}
+
 .tabs {
-  border-bottom: 1px solid $light-gray;
+  border-bottom: 1px solid $dark-gray;
 }
 
 .tab {
@@ -124,7 +140,7 @@ select.input {
 
 .tab a {
   padding: 0.5em 1em;
-  border: 1px solid $light-gray;
+  border: 1px solid $dark-gray;
   border-radius: 0.25em 0.25em 0 0;
   display: block;
 }
@@ -134,7 +150,7 @@ select.input {
 }
 
 .tab:hover {
-  background: $dark-gray;
+  background: $light-gray;
 }
 
 .flex {
@@ -145,6 +161,10 @@ select.input {
 
 .space-between {
   justify-content: space-between;
+}
+
+.float-right {
+  float: right;
 }
 
 .flex-end {
@@ -172,6 +192,6 @@ select.input {
 }
 
 a.text-white:hover, button.text-white:hover {
-  color: $light-gray;
+  color: $dark-gray;
   background: none;
 }
