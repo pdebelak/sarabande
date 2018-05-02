@@ -11,14 +11,14 @@ from .form import PageForm
 @pages.route('/<slug>')
 def show(slug):
     page = Page.query.filter(Page.slug == slug).first_or_404()
-    return render_template('pages/show.html', page=page)
+    return render_template('pages_show.html', page=page)
 
 
 @pages.route('/pages/new', methods=['GET'])
 @login_required('admin')
 def new():
     form = PageForm()
-    return render_template('pages/new.html', form=form)
+    return render_template('pages_new.html', form=form)
 
 
 @pages.route('/pages', methods=['POST'])
@@ -34,7 +34,7 @@ def create():
         except IntegrityError:
             db.session.rollback()
             form.slug.errors.append('This slug is taken.')
-    return render_template('posts/new.html', form=form)
+    return render_template('posts_new.html', form=form)
 
 
 @pages.route('/pages/<slug>/edit', methods=['GET'])
@@ -42,7 +42,7 @@ def create():
 def edit(slug):
     page = Page.query.filter(Page.slug == slug).first_or_404()
     form = PageForm(obj=page)
-    return render_template('pages/edit.html', form=form)
+    return render_template('pages_edit.html', form=form)
 
 
 @pages.route('/pages/<slug>', methods=['POST'])
@@ -59,7 +59,7 @@ def update(slug):
         except IntegrityError:
             db.session.rollback()
             form.slug.errors.append('This slug is taken.')
-    return render_template('pages/edit.html', form=form)
+    return render_template('pages_edit.html', form=form)
 
 
 @pages.route('/pages/<slug>/destroy', methods=['POST'])

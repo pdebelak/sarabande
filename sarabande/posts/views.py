@@ -12,20 +12,20 @@ from .form import PostForm
 @posts.route('/posts', methods=['GET'])
 def index():
     posts = Post.query.all()
-    return render_template('posts/index.html', posts=posts)
+    return render_template('posts_index.html', posts=posts)
 
 
 @posts.route('/posts/<slug>', methods=['GET'])
 def show(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
-    return render_template('posts/show.html', post=post)
+    return render_template('posts_show.html', post=post)
 
 
 @posts.route('/posts/new', methods=['GET'])
 @login_required('user')
 def new():
     form = PostForm()
-    return render_template('posts/new.html', form=form)
+    return render_template('posts_new.html', form=form)
 
 
 @posts.route('/posts', methods=['POST'])
@@ -41,7 +41,7 @@ def create():
         except IntegrityError:
             db.session.rollback()
             form.slug.errors.append('This slug is taken.')
-    return render_template('posts/new.html', form=form)
+    return render_template('posts_new.html', form=form)
 
 
 @posts.route('/posts/<slug>/edit', methods=['GET'])
@@ -51,7 +51,7 @@ def edit(slug):
     if not post.can_edit(current_user):
         return login_manager.unauthorized()
     form = PostForm(obj=post)
-    return render_template('posts/edit.html', form=form)
+    return render_template('posts_edit.html', form=form)
 
 
 @posts.route('/posts/<slug>', methods=['POST'])
@@ -70,7 +70,7 @@ def update(slug):
         except IntegrityError:
             db.session.rollback()
             form.slug.errors.append('This slug is taken.')
-    return render_template('posts/edit.html', form=form)
+    return render_template('posts_edit.html', form=form)
 
 
 @posts.route('/posts/<slug>/destroy', methods=['POST'])

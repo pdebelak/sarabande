@@ -11,7 +11,7 @@ def login_form():
         flash('You are already logged in', 'error')
         return redirect('/')
     form = LoginForm()
-    return render_template('sessions/new.html', form=form)
+    return render_template('sessions_new.html', form=form)
 
 
 @sessions.route('/sessions', methods=['POST'])
@@ -21,7 +21,7 @@ def login():
         login_user(form.user)
         flash('You are logged in!', 'success')
         return redirect('/')
-    return render_template('sessions/new.html', form=form)
+    return render_template('sessions_new.html', form=form)
 
 
 @sessions.route('/sessions/destroy', methods=['POST'])

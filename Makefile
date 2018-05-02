@@ -18,8 +18,11 @@ assets: install_js_dependencies
 console: venv
 	venv/bin/python
 
+package: venv
+	venv/bin/python setup.py sdist
+
 init_db: venv
-	venv/bin/python -c "__import__('sarabande').db.create_all()"
+	FLASK_ENV=development venv/bin/sarabande setup_db
 
 run_tests: venv
 	venv/bin/coverage run --source sarabande setup.py test

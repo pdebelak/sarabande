@@ -1,5 +1,0 @@
-#! /usr/bin/env bash
-
-SARABANDE_PORT=${PORT:-5000}
-
-FLASK_ENV=production venv/bin/uwsgi --http :$SARABANDE_PORT --manage-script-name --mount /=sarabande:app

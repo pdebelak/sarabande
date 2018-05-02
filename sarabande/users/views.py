@@ -12,7 +12,7 @@ from .form import UserForm
 @users.route('/account/new', methods=['GET'])
 def new():
     form = UserForm()
-    return render_template('users/new.html', form=form)
+    return render_template('users_new.html', form=form)
 
 
 @users.route('/account', methods=['POST'])
@@ -28,14 +28,14 @@ def create():
         except IntegrityError:
             db.session.rollback()
             form.username.errors.append('This name has been taken.')
-    return render_template('users/new.html', form=form)
+    return render_template('users_new.html', form=form)
 
 
 @users.route('/account/edit', methods=['GET'])
 @login_required()
 def edit_self():
     form = UserForm(obj=current_user)
-    return render_template('users/edit.html', form=form, user=current_user)
+    return render_template('users_edit.html', form=form, user=current_user)
 
 
 @users.route('/account/<int:id>/edit', methods=['GET'])
@@ -43,7 +43,7 @@ def edit_self():
 def edit(id):
     user = User.query.filter(User.id == id).first_or_404()
     form = UserForm(obj=user)
-    return render_template('users/edit.html', form=form, user=user)
+    return render_template('users_edit.html', form=form, user=user)
 
 
 @users.route('/account/<int:id>', methods=['POST'])
@@ -63,7 +63,7 @@ def update(id):
         except IntegrityError:
             db.session.rollback()
             form.username.errors.append('This name has been taken.')
-    return render_template('users/edit.html', form=form, user=user)
+    return render_template('users_edit.html', form=form, user=user)
 
 
 @users.route('/account/<int:id>/destroy', methods=['POST'])

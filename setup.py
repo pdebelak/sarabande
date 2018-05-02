@@ -29,7 +29,9 @@ setup(
     author_email='pdebelak@gmail.com',
     url='https://github.com/pdebelak/sarabande',
     packages=find_packages(),
-    scripts=['scripts/create_admin', 'scripts/run_server'],
+    include_package_data=True,
+    zip_safe=False,
+    scripts=['scripts/sarabande'],
     cmdclass={'test': TestCommand},
     extras_require={
         'dev': [
@@ -42,7 +44,7 @@ setup(
         'coverage',
     ],
     install_requires=[
-        'flask',
+        'flask>=0.12',
         'flask-bcrypt',
         'flask-compress',
         'flask-login',

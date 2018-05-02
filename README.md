@@ -3,6 +3,41 @@ Sarabande
 
 A simple blog and cms. Meant to be easy to install, use, and customize.
 
+## Usage
+
+To use sarabande, start by cloning this repo:
+
+```
+$ git clone https://github.com/pdebelak/sarabande
+```
+
+Then install it:
+
+```
+$ cd sarabande && python3 setup.py install --user
+```
+
+Create a config file:
+
+```
+$ cp example_config.yml config.yml
+```
+
+Then edit that config file with appropriate values for you.
+
+Create an admin:
+
+```
+$ sarabande --config config.yml setup_db
+$ sarabande --config config.yml create_admin --username [your desired username] -- password [your desired password]
+```
+
+Start the server on port 5000:
+
+```
+$ sarabande --config config.yml server
+```
+
 ## Development
 
 To develop, you must have [python3](https://www.python.org/) and
@@ -31,7 +66,7 @@ Open http://localhost:5000
 You can create an admin user with:
 
 ```
-$ venv/bin/create_admin [some username] [some_password]
+$ FLASK_ENV=development venv/bin/sarabande create_admin --config example_config.ytml --username [some username] --password [some_password]
 ```
 
 Then you can login and start creating pages and posts.

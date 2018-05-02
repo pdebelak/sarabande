@@ -13,18 +13,18 @@ def posts():
         posts = Post.query.all()
     else:
         posts = Post.query.filter(Post.user_id == current_user.id).all()
-    return render_template('admin/posts.html', posts=posts, active='posts')
+    return render_template('admin_posts.html', posts=posts, active='posts')
 
 
 @admin.route('/admin/pages')
 @login_required('admin')
 def pages():
     pages = Page.query.all()
-    return render_template('admin/pages.html', pages=pages, active='pages')
+    return render_template('admin_pages.html', pages=pages, active='pages')
 
 
 @admin.route('/admin/users')
 @login_required('admin')
 def users():
     users = User.query.all()
-    return render_template('admin/users.html', users=users, active='users')
+    return render_template('admin_users.html', users=users, active='users')
