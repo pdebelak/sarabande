@@ -27,7 +27,8 @@ along with Sarabande.  If not, see <http://www.gnu.org/licenses/>.`;
 
 module.exports = {
   entry: {
-    app: './assets/index.js',
+    light: './assets/light.js',
+    dark: './assets/dark.js',
     admin: './assets/admin.js',
   },
   module: {

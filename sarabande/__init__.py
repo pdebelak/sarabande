@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
@@ -46,6 +46,11 @@ def home_page_data(home_page):
 
 view_func, defaults = home_page_data(app.config['HOME_PAGE'])
 app.route('/', defaults=defaults)(view_func)
+
+
+@app.route('/source-license')
+def license():
+    return render_template('license.html')
 
 
 from .models import User

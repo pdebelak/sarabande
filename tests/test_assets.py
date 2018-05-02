@@ -48,3 +48,28 @@ class TestAssets(unittest.TestCase):
                 RuntimeError,
                 msg='Could not load manifest file tests/resources/badmanifest.json'):
             Assets(self.app)
+
+    def test_theme_asset(self):
+        manifest_path = 'tests/resources/manifest.json'
+        self.app.config['THEME'] = 'dark'
+        self.app.config['ASSET_MANIFEST_PATH'] = manifest_path
+        Assets(self.app)
+        theme_asset = self.app.jinja_env.globals['theme_asset']
+        self.assertEqual(
+            theme_asset('css'),
+            '<link rel="stylesheet" type="text/css" href="/static/dark.somehash.css">')
+        self.assertEqual(
+            theme_asset('js'),
+            '<script src="/static/dark.somehash.js" async="async"></script>')
+
+    def test_theme_not_specified(self):
+        manifest_path = 'tests/resources/manifest.json'
+        self.app.config['ASSET_MANIFEST_PATH'] = manifest_path
+        Assets(self.app)
+        theme_asset = self.app.jinja_env.globals['theme_asset']
+        self.assertEqual(
+            theme_asset('css'),
+            '<link rel="stylesheet" type="text/css" href="/static/light.somehash.css">')
+        self.assertEqual(
+            theme_asset('js'),
+            '<script src="/static/light.somehash.js" async="async"></script>')

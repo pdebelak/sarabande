@@ -1,4 +1,4 @@
-import './app.scss';
+import 'normalize.css';
 
 import closeButton from './closeButton';
 

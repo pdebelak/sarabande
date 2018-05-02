@@ -6,7 +6,7 @@
 
     <title>{% block title %}{% endblock %} - {{ config.TITLE }}</title>
 
-    {{ asset_tag('app.css') }}
+    {{ theme_asset('css') }}
     {% block head %}{% endblock %}
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -15,30 +15,28 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <![endif]-->
   </head>
-  <body>
-    <header class="bg--primary">
+  <body class="flex flex-column">
+    <header class="bg--primary flex-no-shrink">
       <div class="flex container">
-        <h1 class="mr-1"><a href="/" class="unstyled-link text-white">{{ config.TITLE }}</a></h1>
+        <h1 class="mr-1"><a href="/" class="unstyled-link text-background">{{ config.TITLE }}</a></h1>
         <nav class="flex space-between flex-grow">
           <ul class="unstyled-list flex">
             {% for link in config.NAV_LINKS %}
-            <li class="mr-1"><a href="{{ link.link }}" class="unstyled-link text-white">{{ link.name }}</a></li>
+            <li class="mr-1"><a href="{{ link.link }}" class="unstyled-link text-background">{{ link.name }}</a></li>
             {% endfor %}
           </ul>
           <ul class="unstyled-list flex">
             {% if current_user.is_authenticated %}
             {% if current_user.can_post %}
-              <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-white">Admin</a></li>
+              <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-background">Admin</a></li>
             {% endif %}
-            <li class="mr-1"><a href="{{ url_for('users.edit', id=current_user.id) }}" class="unstyled-link text-white">{{ current_user.username }}</a></li>
+            <li class="mr-1"><a href="{{ url_for('users.edit', id=current_user.id) }}" class="unstyled-link text-background">{{ current_user.username }}</a></li>
             <li class="mr-1">
               <form action="{{ url_for('sessions.logout') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <button class="button button--link text-white">Logout</button>
+                <button class="button button--link text-background">Logout</button>
               </form>
             </li>
-            {% else %}
-            <li class="mr-1"><a href="{{ url_for('sessions.login_form') }}" class="unstyled-link text-white">Login</a></li>
             {% endif %}
           </ul>
         </nav>
@@ -47,7 +45,7 @@
     {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
         {% for category, message in messages %}
-        <section class="bg--{{category}} ptb-1">
+        <section class="bg--{{category}} flex-no-shrink ptb-1">
           <span class="float-right mr-1" data-close-button></span>
           <div class="container">
             {{ message }}
@@ -56,10 +54,26 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-    <section class="container">
-      {% block body %}
-      {% endblock %}
-    </section>
-    {{ asset_tag('app.js') }}
+    <div class="flex-auto">
+      <section class="container">
+        {% block body %}
+        {% endblock %}
+      </section>
+    </div>
+    <footer class="bg--primary flex-no-shrink">
+      <div class="flex container space-between">
+        <ul class="unstyled-list flex">
+          {% if not current_user.is_authenticated %}
+          <li class="mr-1"><a href="{{ url_for('users.new') }}" class="unstyled-link text-background">Sign Up</a></li>
+          <li class="mr-1"><a href="{{ url_for('sessions.login_form') }}" class="unstyled-link text-background">Login</a></li>
+          {% endif %}
+        </ul>
+        {% if config.COPYRIGHT %}
+        <p class="text-background">Copyright {{ config.COPYRIGHT }}</p>
+        {% endif %}
+      </div>
+      <p class="center text-light-background mt-0">This site is powered by <a href="{{ url_for('license') }}" class="text-background">Sarabande</a>.</p>
+    </footer>
+    {{ theme_asset('js') }}
   </body>
 </html>

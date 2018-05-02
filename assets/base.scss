@@ -1,28 +1,27 @@
-// colors
-$purple: #AA7FB7;
-$aqua: #42899F;
-$red: #EA2233;
-$green: #26A58F;
-$white: #FFF;
-$black: #000;
-$light-gray: #DDD;
-$dark-gray: #CCC;
-$primary: $aqua;
-$secondary: $purple;
-$success: $green;
-$warning: $red;
-
 $font-size: 18px;
 
 html {
   margin: 0;
   font-family: Times, serif;
   font-size: $font-size;
+  height: 100%;
 }
 
 body {
   margin: 0;
-  padding-bottom: 1em;
+  height: 100%;
+  background: $background;
+  color: $text-color;
+}
+
+a {
+  color: $link-color;
+   &:hover {
+     color: $link-color-hover;
+   }
+   &:visited {
+     color: $link-color-hover;
+   }
 }
 
 .container {
@@ -32,17 +31,17 @@ body {
 
 .bg--primary {
   background: $primary;
-  color: $white;
+  color: $background;
 }
 
 .bg--success {
   background: $success;
-  color: $white;
+  color: $background;
 }
 
 .bg--error {
   background: $warning;
-  color: $white;
+  color: $background;
 }
 
 .unstyled-link {
@@ -59,30 +58,27 @@ body {
   padding: 0.5em;
   border-radius: 0.25em;
   border: 1px solid #aaa;
-}
 
-textarea.input {
-  height: 20em;
 }
 
 select.input {
-  background: $white;
+  background: $background;
 }
 
 .button {
   border: 1px solid #aaa;
   padding: 0.5em 1em;
   border-radius: 0.25em;
-  background: $white;
+  background: $background;
   color: $black;
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
   text-decoration: none;
-}
 
-.button:hover {
-  background: $light-gray;
+  &:hover {
+    background: $light-background;
+  }
 }
 
 @mixin colored-button($color) {
@@ -116,11 +112,11 @@ select.input {
 
 .close-button {
   cursor: pointer;
-  background: rgba($light-gray, 0.5);
+  background: rgba($light-background, 0.5);
   border-radius: 100%;
 
   &:hover {
-    background: rgba($dark-gray, 0.5);
+    background: rgba($dark-background, 0.5);
   }
 
   &:before {
@@ -131,26 +127,26 @@ select.input {
 }
 
 .tabs {
-  border-bottom: 1px solid $dark-gray;
+  border-bottom: 1px solid $dark-background;
 }
 
 .tab {
   margin: 0 0.25em -1px 0.25em;
+
+  &:hover {
+    background: $light-background;
+  }
 }
 
 .tab a {
   padding: 0.5em 1em;
-  border: 1px solid $dark-gray;
+  border: 1px solid $dark-background;
   border-radius: 0.25em 0.25em 0 0;
   display: block;
 }
 
 .tab--active a {
-  border-bottom: 1px solid $white;
-}
-
-.tab:hover {
-  background: $light-gray;
+  border-bottom: 1px solid $background;
 }
 
 .flex {
@@ -159,20 +155,36 @@ select.input {
   align-items: center;
 }
 
-.space-between {
-  justify-content: space-between;
-}
-
-.float-right {
-  float: right;
-}
-
 .flex-end {
   justify-content: flex-end;
 }
 
 .flex-grow {
   flex-grow: 1;
+}
+
+.flex-column {
+  flex-wrap: nowrap;
+  flex-direction: column;
+  & > * {
+    width: 100%;
+  }
+}
+
+.flex-auto {
+  flex: 1 0 auto;
+}
+
+.flex-no-shrink {
+  flex-shrink: 0;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.float-right {
+  float: right;
 }
 
 .mr-1 {
@@ -187,11 +199,27 @@ select.input {
   padding: 1em 0;
 }
 
-.text-white {
-  color: $white;
+.mt-0 {
+  margin-top: 0;
 }
 
-a.text-white:hover, button.text-white:hover {
-  color: $dark-gray;
+.text-background {
+  color: $background;
+}
+
+a.text-background:visited {
+  color: $background;
+}
+
+a.text-background:hover, button.text-background:hover {
+  color: $dark-background;
   background: none;
+}
+
+.text-light-background {
+  color: $light-background;
+}
+
+.center {
+  text-align: center;
 }

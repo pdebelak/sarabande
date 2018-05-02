@@ -1,5 +1,7 @@
 {
-  "admin.js": "/static/admin.8aff471c0c8f37be8d23.js",
-  "app.js": "/static/app.8aff471c0c8f37be8d23.js",
-  "app.css": "/static/app.8aff471c0c8f37be8d23.css"
+  "admin.js": "/static/admin.cb28935f1191efd2a631.js",
+  "dark.js": "/static/dark.cb28935f1191efd2a631.js",
+  "dark.css": "/static/dark.cb28935f1191efd2a631.css",
+  "light.js": "/static/light.cb28935f1191efd2a631.js",
+  "light.css": "/static/light.cb28935f1191efd2a631.css"
 }

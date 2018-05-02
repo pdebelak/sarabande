@@ -2,6 +2,8 @@ title: Sarabande
 secret_key: 'PLEASE_CHANGE_THIS_NOT_SECURE'
 database_uri: 'sqlite:///sarabande_development.sqlite3'
 home_page: 'posts#index'
+copyright: '2018 Peter Debelak'
+theme: 'light'
 nav_links:
   - name: About
     link: '/about'

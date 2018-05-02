@@ -1,4 +1,8 @@
 {
   "app.js": "/static/app.somehash.js",
-  "app.css": "/static/app.somehash.css"
+  "app.css": "/static/app.somehash.css",
+  "light.js": "/static/light.somehash.js",
+  "light.css": "/static/light.somehash.css",
+  "dark.js": "/static/dark.somehash.js",
+  "dark.css": "/static/dark.somehash.css"
 }

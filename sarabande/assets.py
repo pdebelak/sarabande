@@ -46,6 +46,22 @@ def _manifest_url(app):
     return url_for
 
 
+THEMES = ['light', 'dark']
+DEFAULT_THEME = 'light'
+
+
+def _theme_asset(app):
+    theme = app.config.get('THEME')
+    if theme not in THEMES:
+        theme = DEFAULT_THEME
+
+    def theme_asset(extension):
+        return app.jinja_env.globals['asset_tag'](
+            '{theme}.{extension}'.format(theme=theme, extension=extension))
+
+    return theme_asset
+
+
 class Assets(object):
     def __init__(self, app=None):
         if app is not None:
@@ -60,3 +76,4 @@ class Assets(object):
                                   'static/manifest.json')
             url_for = _manifest_url(app)
         app.add_template_global(_asset_tag_with_lookup(url_for), 'asset_tag')
+        app.add_template_global(_theme_asset(app), 'theme_asset')

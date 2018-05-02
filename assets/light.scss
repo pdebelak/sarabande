@@ -1,0 +1,18 @@
+$purple: #B10DC9;
+$aqua: #42899F;
+$red: #EA2233;
+$blue: #0074D9;
+$green: #26A58F;
+$white: #FFF;
+$black: #000;
+$primary: $aqua;
+$background: $white;
+$light-background: darken($background, 13%);
+$dark-background: darken($background, 20%);
+$success: $green;
+$warning: $red;
+$text-color: #333;
+$link-color: $blue;
+$link-color-hover: $purple;
+
+@import "./base.scss";

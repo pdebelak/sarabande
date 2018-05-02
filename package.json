@@ -23,6 +23,7 @@
     "webpack-manifest-plugin": "^2.0.1"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^10.0.0"
+    "@ckeditor/ckeditor5-build-classic": "^10.0.0",
+    "normalize.css": "^8.0.0"
   }
 }

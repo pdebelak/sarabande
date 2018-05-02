@@ -1,0 +1,16 @@
+$red: #EA2233;
+$orange: #FF851B;
+$white: #FFF;
+$black: #000;
+$dark-gray: #333;
+$primary: $orange;
+$text-color: $white;
+$link-color: $orange;
+$link-color-hover: darken($orange, 20%);
+$background: $dark-gray;
+$light-background: lighten($background, 20%);
+$dark-background: lighten($background, 13%);
+$success: $white;
+$warning: $red;
+
+@import "./base.scss";
