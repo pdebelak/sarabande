@@ -79,16 +79,24 @@ select.input {
 
   &:hover {
     background: $light-background;
+    color: $black;
+  }
+  &:visited {
+    color: $black;
   }
 }
 
 @mixin colored-button($color) {
   background: $color;
-  color: #fff;
+  color: $background;
   border: 1px solid lighten($color, 20%);
 
   &:hover {
     background: darken($color, 20%);
+    color: $background;
+  }
+  &:visited {
+    color: $background;
   }
 }
 

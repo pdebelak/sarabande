@@ -18,7 +18,9 @@ class TestCommand(Command):
         db.create_all()
         suite = unittest.defaultTestLoader.discover('tests')
         runner = unittest.TextTestRunner(verbosity=1)
-        return runner.run(suite)
+        result = runner.run(suite)
+        if not result.wasSuccessful():
+            raise SystemExit(1)
 
 
 setup(
@@ -50,6 +52,7 @@ setup(
         'flask-login',
         'flask-sqlalchemy',
         'flask-wtf',
+        'flask-migrate',
         'pillow',
         'python-slugify',
         'pyyaml',

@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_compress import Compress
+from flask_migrate import Migrate
 from .assets import Assets
 
 from .config import Config, BaseModel
@@ -17,6 +18,7 @@ app.config.from_object(Config)
 Compress(app)
 Assets(app)
 db = SQLAlchemy(app, model_class=BaseModel)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 csrf = CSRFProtect(app)
 login_manager = LoginManager(app)

@@ -1,3 +1,4 @@
 recursive-include sarabande/static *
 recursive-include sarabande/templates *
 include LICENSE.md
+include migrations/alembic.ini

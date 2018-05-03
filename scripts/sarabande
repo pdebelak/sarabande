@@ -30,7 +30,7 @@ def create_parser():
     create_admin.add_argument('--password', dest='password',
                               help='password for admin', required=True)
 
-    commands.add_parser('setup_db', help='setup sarabande database')
+    commands.add_parser('update_db', help='update sarabande database')
 
     return parser
 
@@ -40,8 +40,8 @@ def execute_command(args):
         return _run_server(args)
     if args.command == 'create_admin':
         return _create_admin(args)
-    if args.command == 'setup_db':
-        return _setup_db(args)
+    if args.command == 'update_db':
+        return _update_db(args)
 
 
 def _run_server(args):
@@ -68,9 +68,13 @@ def _create_admin(args):
     return 0
 
 
-def _setup_db(_args):
-    import sarabande
-    sarabande.db.create_all()
+def _update_db(_args):
+    import os
+    os.environ['FLASK_APP'] = 'sarabande'
+    from flask_migrate import upgrade
+    from sarabande import app
+    with app.app_context():
+        upgrade()
 
 
 if __name__ == '__main__':

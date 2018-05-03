@@ -28,7 +28,7 @@ Then edit that config file with appropriate values for you.
 Create an admin:
 
 ```
-$ sarabande --config config.yml setup_db
+$ sarabande --config config.yml update_db
 $ sarabande --config config.yml create_admin --username [your desired username] -- password [your desired password]
 ```
 
