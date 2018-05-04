@@ -46,6 +46,7 @@ setup(
         'coverage',
     ],
     install_requires=[
+        'beautifulsoup4',
         'flask>=0.12',
         'flask-bcrypt',
         'flask-compress',

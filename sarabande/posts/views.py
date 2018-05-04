@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 
 from sarabande import db, login_manager
 from sarabande.posts import posts
@@ -33,8 +34,8 @@ def new():
 def create():
     form = PostForm()
     if form.validate():
-        post = form.to_post(user=current_user)
         try:
+            post = form.to_post(user=current_user)
             db.session.add(post)
             db.session.commit()
             return redirect(url_for('posts.show', slug=post.slug))
@@ -51,6 +52,7 @@ def edit(slug):
     if not post.can_edit(current_user):
         return login_manager.unauthorized()
     form = PostForm(obj=post)
+    form.tag_names.data = post.tag_names
     return render_template('posts_edit.html', form=form)
 
 
@@ -62,8 +64,8 @@ def update(slug):
         return login_manager.unauthorized()
     form = PostForm()
     if form.validate():
-        form.update_post(post)
         try:
+            form.update_post(post)
             db.session.add(post)
             db.session.commit()
             return redirect(url_for('posts.show', slug=post.slug))

@@ -19,3 +19,11 @@ class TestPostModel(unittest.TestCase):
     def testRepr(self):
         post = Post(title='Hello There!')
         self.assertEqual(str(post), '<Post Hello There!>')
+
+    def testSummary(self):
+        post = Post(body='<p>First paragraph!</p><p>Second!</p>')
+        self.assertEqual(post.summary, '<p>First paragraph!</p>')
+
+    def testSummaryNoPTag(self):
+        post = Post(body='Just some garbage in here.')
+        self.assertEqual(post.summary, post.body)

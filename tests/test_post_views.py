@@ -1,4 +1,4 @@
-from sarabande.models import Post
+from sarabande.models import Post, Tag
 
 from factories import build_post, build_user
 from helpers import AppTest
@@ -117,6 +117,40 @@ class TestPostViews(AppTest):
         post = Post.query.filter(Post.slug == 'my-post').first()
         self.assertIsNone(post)
 
+    def testPostCreateWithNewTags(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts',
+            data={'title': 'My post', 'body': 'Posting it',
+                  'tag_names': 'Great, Post'})
+        self.assert_redirected(resp, '/posts/my-post')
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        tags = Tag.query.filter(Tag.slug.in_(['great', 'post'])).all()
+        self.assertEqual(len(tags), 2)
+        for tag in tags:
+            self.assertEqual(tag.posts[0].id, post.id)
+
+    def testPostCreateMixOfNewAndExistingTags(self):
+        user = build_user(user_type='user')
+        existing_tag = Tag(name='My Tag!!!')
+        self.db.session.add(user)
+        self.db.session.add(existing_tag)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts',
+            data={'title': 'My post', 'body': 'Posting it',
+                  'tag_names': 'My tag, New tag'})
+        self.assert_redirected(resp, '/posts/my-post')
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        tags = Tag.query.all()
+        self.assertEqual(len(tags), 2)
+        for tag in tags:
+            self.assertEqual(tag.posts[0].id, post.id)
+
     def testPostEditAsCommenter(self):
         user = build_user(user_type='commenter')
         post = build_post()
@@ -161,6 +195,19 @@ class TestPostViews(AppTest):
         resp = self.app.get('/posts/' + slug + '/edit')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(slug.encode('utf-8') in resp.data)
+
+    def testPostEditWithTags(self):
+        user = build_user(user_type='user')
+        tags = [Tag(name='First tag'), Tag(name='Second tag')]
+        post = build_post(user=user, tags=tags)
+        slug = post.slug
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/edit')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'First tag' in resp.data)
+        self.assertTrue(b'Second tag' in resp.data)
 
     def testPostUpdate(self):
         user = build_user(user_type='user')
@@ -228,6 +275,28 @@ class TestPostViews(AppTest):
             '/posts/' + slug,
             data={'title': 'New title', 'body': 'New body', 'slug': 'new'})
         self.assertEqual(resp.status_code, 401)
+
+    def testPostUpdateWithTags(self):
+        user = build_user(user_type='user')
+        tags = [Tag(name='First tag'), Tag(name='Second tag')]
+        post = build_post(user=user, tags=tags)
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={
+                'title': 'New title',
+                'body': post.body,
+                'slug': post.slug,
+                'tag_names': 'Second tag, New tag'})
+        self.assert_redirected(resp, '/posts/' + post.slug)
+        new_post = Post.query.filter(Post.slug == slug).first()
+        self.assertEqual(len(new_post.tags), 2)
+        self.assertEqual(new_post.tag_names, 'Second tag, New tag')
 
     def testPostDelete(self):
         user = build_user(user_type='user')

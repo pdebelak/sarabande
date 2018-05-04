@@ -12,7 +12,7 @@ def posts():
     if current_user.is_admin:
         posts = Post.query.all()
     else:
-        posts = Post.query.filter(Post.user_id == current_user.id).all()
+        posts = current_user.posts
     return render_template('admin_posts.html', posts=posts, active='posts')
 
 

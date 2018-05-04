@@ -2,7 +2,8 @@ import re
 import unittest
 
 from sarabande import app, db
-from sarabande.models import User, Post, Page, Image
+from sarabande.models import User, Post, Page, Image, Tag
+from sarabande.models.posts_tags import posts_tags
 
 
 def _redirect_path(resp):
@@ -21,6 +22,8 @@ class AppTest(unittest.TestCase):
         Page.query.delete()
         Post.query.delete()
         Image.query.delete()
+        Tag.query.delete()
+        self.db.session.execute(posts_tags.delete())
         self.db.session.commit()
 
     def login_user(self, user):

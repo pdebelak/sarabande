@@ -34,7 +34,7 @@ def create():
         except IntegrityError:
             db.session.rollback()
             form.slug.errors.append('This slug is taken.')
-    return render_template('posts_new.html', form=form)
+    return render_template('pages_new.html', form=form)
 
 
 @pages.route('/pages/<slug>/edit', methods=['GET'])

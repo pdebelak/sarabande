@@ -9,6 +9,7 @@
   {{ render_field(form.title, autofocus=True) }}
   {{ render_field(form.slug) }}
   {{ render_field(form.body) }}
+  {{ render_field(form.tag_names) }}
   <button class="button button--primary">Submit</button>
 </form>
 {{ asset_tag('admin.js') }}

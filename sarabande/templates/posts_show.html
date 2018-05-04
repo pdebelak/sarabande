@@ -4,4 +4,11 @@
 <h1>{{ post.title }}</h1>
 <p>by {{ post.author_name }}</p>
 {{ post.html_body }}
+{% if post.tags %}
+<section class="flex">
+  {% for tag in post.tags %}
+  <p class="mr-1"><a class="button" href={{ url_for('tags.show', slug=tag.slug) }}>{{ tag.name }}</a></p>
+  {% endfor %}
+</section>
+{% endif %}
 {% endblock %}

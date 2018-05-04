@@ -29,11 +29,13 @@ from .images import images as image_blueprint
 from .sessions import sessions as session_blueprint
 from .users import users as user_blueprint
 from .pages import show as page_show, pages as page_blueprint
+from .tags import tags as tag_blueprint
 from .admin import admin as admin_blueprint
 app.register_blueprint(admin_blueprint)
-app.register_blueprint(post_blueprint)
-app.register_blueprint(user_blueprint)
 app.register_blueprint(image_blueprint)
+app.register_blueprint(post_blueprint)
+app.register_blueprint(tag_blueprint)
+app.register_blueprint(user_blueprint)
 app.register_blueprint(page_blueprint)
 app.register_blueprint(session_blueprint)
 
