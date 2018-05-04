@@ -3,6 +3,8 @@ Sarabande
 
 A simple blog and cms. Meant to be easy to install, use, and customize.
 
+[![Build Status](https://travis-ci.org/pdebelak/sarabande.svg?branch=master)](https://travis-ci.org/pdebelak/sarabande)
+
 ## Usage
 
 To use sarabande, start by cloning this repo:
