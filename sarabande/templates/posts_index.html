@@ -6,13 +6,13 @@
 {% endif %}
 <ul class="unstyled-list">
 {% for post in posts %}
-<li>
+<li class="card">
   <div class="flex">
-    <h3 class="mr-1"><a href="{{ url_for('posts.show', slug=post.slug) }}" class="unstyled-link">{{ post.title }}</a></h3>
-    <p>by {{ post.author_name }}</p>
+    <h3 class="unmargined mr-1"><a href="{{ url_for('posts.show', slug=post.slug) }}" class="unstyled-link">{{ post.title }}</a></h3>
+    <small>by {{ post.author_name }}</small>
   </div>
   {{ post.summary }}
-  <p><a href="{{ url_for('posts.show', slug=post.slug) }}">Read more</a></p>
+  <p class="mb-0"><a href="{{ url_for('posts.show', slug=post.slug) }}">Read more</a></p>
 </li>
 {% endfor %}
 </ul>
