@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from faker import Faker
 
 from sarabande.models import Post, User, Page, Image
@@ -25,6 +27,7 @@ def build_post(**kwargs):
         'title': faker.sentence(),
         'body': faker.text(),
         'user': build_user(),
+        'published_at': datetime.utcnow(),
     }
     return _build_model(Post, defaults, kwargs)
 

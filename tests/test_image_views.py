@@ -1,16 +1,10 @@
 from io import BytesIO
 import json
-from unittest import mock
 
 from sarabande.models import Image, User
-from sarabande.images.views import ImageForm
 
 from factories import build_image, build_user
 from helpers import AppTest
-
-
-def fake_thumbnail(self):
-    return self.upload.data.read()
 
 
 class TestImageViews(AppTest):
@@ -45,25 +39,25 @@ class TestImageViews(AppTest):
             '/images', data={'upload': (BytesIO(b'image'), 'image.png')})
         self.assertEqual(resp.status_code, 401)
 
-    @mock.patch.object(ImageForm, '_thumbnail_image', fake_thumbnail)
     def testImageCreateUser(self):
         user = build_user(user_type='user')
-        username = user.username
-        self.db.session.add(user)
-        self.db.session.commit()
-        user = User.query.filter(User.username == username).first()
-        self.login_user(user)
-        resp = self.app.post(
-            '/images',
-            data={'upload': (BytesIO(b'image'), 'image.png')})
-        self.assertEqual(resp.status_code, 200)
-        image = Image.query.filter(Image.name == 'image.png').first()
-        self.assertEqual(image.image, b'image')
-        self.assertEqual(image.mimetype, 'image/png')
-        self.assertEqual(image.user_id, user.id)
-        body = json.loads(resp.data.decode('utf-8'))
-        self.assertEqual(body['url'], image.url)
-        self.assertTrue(body['uploaded'])
+        with open('tests/resources/sample_image.jpeg', 'rb') as img:
+            image_bytes = BytesIO(img.read())
+            username = user.username
+            self.db.session.add(user)
+            self.db.session.commit()
+            user = User.query.filter(User.username == username).first()
+            self.login_user(user)
+            resp = self.app.post(
+                '/images',
+                data={'upload': (image_bytes, 'image.jpeg')})
+            self.assertEqual(resp.status_code, 200)
+            image = Image.query.filter(Image.name == 'image.jpeg').first()
+            self.assertEqual(image.mimetype, 'image/jpeg')
+            self.assertEqual(image.user_id, user.id)
+            body = json.loads(resp.data.decode('utf-8'))
+            self.assertEqual(body['url'], image.url)
+            self.assertTrue(body['uploaded'])
 
     def testImageCreateNoUpload(self):
         user = build_user(user_type='user')

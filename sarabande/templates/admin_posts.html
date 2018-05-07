@@ -4,7 +4,11 @@
 <p class="flex flex-end"><a href="{{ url_for('posts.new') }}" class="button button--success">New post</a></p>
 {% for post in posts %}
 <div class="flex space-between">
-  <p><a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></p>
+  <div class="flex">
+    <p class="mr-half"><a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></p>
+    <p class="mr-half">by {{ post.author_name }}</p>
+    <p>published {{ post.published_at|publish_time('long') }}</p>
+  </div>
   <div class="flex">
     <a href="{{ url_for('posts.edit', slug=post.slug) }}" class="button">Edit</a>
     <form action="{{ url_for('posts.destroy', slug=post.slug) }}" method="POST" class="ml-1">

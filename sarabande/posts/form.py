@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from flask_wtf import FlaskForm
-from slugify import slugify
-from wtforms import StringField, TextAreaField
-from wtforms.validators import DataRequired
+from wtforms import StringField, TextAreaField, BooleanField
+from wtforms.validators import DataRequired, Optional
+from wtforms.ext.dateutil.fields import DateTimeField
 
 from sarabande.models import Post, Tag
 
@@ -10,14 +12,20 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     slug = StringField('Slug')
     body = TextAreaField('Body', validators=[DataRequired()])
+    published = BooleanField('Published')
+    published_at = DateTimeField(
+        'Publish time (in UTC)', display_format='%Y-%m-%dT%H:%M',
+        validators=[Optional()])
     tag_names = StringField('Tags (comma separated)')
 
     def to_post(self, user=None):
         tags = self._find_or_build_tags()
+        published_at = self._get_published_at()
         return Post(
             title=self.title.data,
             slug=self.slug.data,
             body=self.body.data,
+            published_at=published_at,
             user=user,
             tags=tags,
         )
@@ -27,6 +35,7 @@ class PostForm(FlaskForm):
         post.slug = self.slug.data
         post.body = self.body.data
         post.tags = self._find_or_build_tags()
+        post.published_at = self._get_published_at()
 
     def _find_or_build_tags(self):
         if not self.tag_names.data:
@@ -40,3 +49,10 @@ class PostForm(FlaskForm):
             if tag.slug not in found_tag_slugs:
                 tags.append(tag)
         return tags
+
+    def _get_published_at(self):
+        if self.published_at.data:
+            return self.published_at.data
+        if self.published.data:
+            return datetime.utcnow()
+        return None

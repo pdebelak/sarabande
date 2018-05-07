@@ -3,6 +3,7 @@
 {% block body %}
 <h1>{{ post.title }}</h1>
 <p>by {{ post.author_name }}</p>
+<p>published {{ post.published_at|publish_time }}</p>
 {{ post.html_body }}
 {% if post.tags %}
 <section class="flex">

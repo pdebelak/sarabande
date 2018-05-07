@@ -41,7 +41,7 @@ def edit_self():
 @users.route('/account/<int:id>/edit', methods=['GET'])
 @login_required('admin')
 def edit(id):
-    user = User.query.filter(User.id == id).first_or_404()
+    user = User.query.get_or_404(id)
     form = UserForm(obj=user)
     return render_template('users_edit.html', form=form, user=user)
 
@@ -49,7 +49,7 @@ def edit(id):
 @users.route('/account/<int:id>', methods=['POST'])
 @login_required()
 def update(id):
-    user = User.query.filter(User.id == id).first_or_404()
+    user = User.query.get_or_404(id)
     if not user.can_edit(current_user):
         return login_manager.unauthorized()
     form = UserForm()
@@ -69,7 +69,7 @@ def update(id):
 @users.route('/account/<int:id>/destroy', methods=['POST'])
 @login_required()
 def destroy(id):
-    user = User.query.filter(User.id == id).first_or_404()
+    user = User.query.get_or_404(id)
     if not user.can_edit(current_user):
         return login_manager.unauthorized()
     db.session.delete(user)

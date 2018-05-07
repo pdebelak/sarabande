@@ -17,10 +17,14 @@ class UserConfig(object):
         return self.user_config.get(item, default)
 
 
+def open_user_config(config_filename):
+    try:
+        with open(config_filename) as config_file:
+            return UserConfig(yaml.load(config_file))
+    except IOError:
+        raise RuntimeError(
+            'Unable to open config file {file}'.format(file=config_filename))
+
+
 config_filename = os.getenv('SARABANDE_CONFIG', 'example_config.yml')
-try:
-    with open(config_filename) as config_file:
-        user_config = UserConfig(yaml.load(config_file))
-except IOError:
-    raise RuntimeError(
-        'Unable to open config file {file}'.format(file=config_filename))
+user_config = open_user_config(config_filename)

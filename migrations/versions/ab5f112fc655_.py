@@ -1,4 +1,4 @@
-"""empty message
+"""Add tags for posts
 
 Revision ID: ab5f112fc655
 Revises: 4baeeadb0a26
