@@ -2,7 +2,7 @@ import re
 import unittest
 
 from sarabande import app, db
-from sarabande.models import User, Post, Page, Image, Tag
+from sarabande.models import User, Post, Page, Image, Tag, Comment
 from sarabande.models.posts_tags import posts_tags
 
 
@@ -23,6 +23,7 @@ class AppTest(unittest.TestCase):
         Post.query.delete()
         Image.query.delete()
         Tag.query.delete()
+        Comment.query.delete()
         self.db.session.execute(posts_tags.delete())
         self.db.session.commit()
 

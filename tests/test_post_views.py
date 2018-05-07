@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from sarabande.models import Post, Tag
+from sarabande.models import Post, Tag, Comment
 
-from factories import build_post, build_user
+from factories import build_post, build_user, build_comment
 from helpers import AppTest
 
 
@@ -446,3 +446,105 @@ class TestPostViews(AppTest):
         self.login_user(user)
         resp = self.app.post('/posts/' + slug + '/destroy')
         self.assertEqual(resp.status_code, 401)
+
+    def testPostCommentNewNotLoggedIn(self):
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(post)
+        self.db.session.commit()
+        resp = self.app.get('/posts/' + slug + '/comments/new')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostCommentIndex(self):
+        comment = build_comment()
+        other_comment = build_comment(post=comment.post)
+        diff_post_comment = build_comment()
+        slug = comment.post.slug
+        self.db.session.add(comment)
+        self.db.session.add(other_comment)
+        self.db.session.add(diff_post_comment)
+        self.db.session.commit()
+        resp = self.app.get('/posts/' + slug + '/comments')
+        self.assertEqual(resp.status_code, 200)
+        post = Post.query.filter(Post.slug == slug).first()
+        self.assertEqual(len(post.comments), 2)
+        for comment in post.comments:
+            self.assertTrue(comment.body.encode('utf-8') in resp.data)
+        other_post = next(post for post in Post.query.all()
+                          if post.slug != slug)
+        self.assertEqual(len(other_post.comments), 1)
+        self.assertFalse(other_post.comments[0].body.encode('utf-8')
+                         in resp.data)
+
+    def testPostCommentIndexAutolink(self):
+        comment = build_comment(
+            body='google.com rules! <script>alert("hacks")</script>')
+        slug = comment.post.slug
+        self.db.session.add(comment)
+        self.db.session.commit()
+        resp = self.app.get('/posts/' + slug + '/comments')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(
+            b'<a href="http://google.com">google.com</a> rules! &lt;script&gt;alert(&#34;hacks&#34;)&lt;/script&gt;'
+            in resp.data)
+
+    def testPostCommentNew(self):
+        post = build_post()
+        user = build_user(user_type='commenter')
+        slug = post.slug
+        title = post.title
+        self.db.session.add(post)
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug + '/comments/new')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'Comment on ' + title.encode('utf-8') in resp.data)
+
+    def testPostCommentNotLoggedIn(self):
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(post)
+        self.db.session.commit()
+        resp = self.app.post('/posts/' + slug + '/comments')
+        self.assertEqual(resp.status_code, 401)
+
+    def testPostCommentBadSlug(self):
+        user = build_user(user_type='commenter')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts/not-found/comments')
+        self.assertEqual(resp.status_code, 404)
+
+    def testPostComment(self):
+        user = build_user(user_type='commenter')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        user_id = user.id
+        resp = self.app.post('/posts/' + slug + '/comments',
+                             data={'body': 'First!'})
+        self.assert_redirected(resp, '/posts/' + slug + '/comments')
+        comment = Comment.query.first()
+        self.assertEqual(comment.body, 'First!')
+        self.assertEqual(comment.user_id, user_id)
+        self.assertEqual(comment.post.slug, slug)
+
+    def testPostCommentNoBody(self):
+        user = build_user(user_type='commenter')
+        post = build_post()
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post('/posts/' + slug + '/comments',
+                             data={'body': ''})
+        self.assertEqual(resp.status_code, 200)
+        comment = Comment.query.first()
+        self.assertIsNone(comment)
+        self.assertTrue(b'This field is required.' in resp.data)

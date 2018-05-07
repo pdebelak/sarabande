@@ -1,0 +1,12 @@
+{% from "_form.html" import render_field %}
+{% extends "layout.html" %}
+{% block title %}Comment on {{ post.title }}{% endblock %}
+{% block body %}
+<h1>Comment on <a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></h1>
+
+<form method="POST" action="{{ url_for('posts.comments_create', slug=post.slug) }}">
+  {{ form.csrf_token }}
+  {{ render_field(form.body, autofocus=True) }}
+  <button class="button button--primary">Comment</button>
+</form>
+{% endblock %}

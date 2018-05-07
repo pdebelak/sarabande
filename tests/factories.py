@@ -2,7 +2,7 @@ from datetime import datetime
 
 from faker import Faker
 
-from sarabande.models import Post, User, Page, Image
+from sarabande.models import Post, User, Page, Image, Comment
 
 
 faker = Faker()
@@ -48,3 +48,12 @@ def build_image(**kwargs):
         'user': build_user(),
     }
     return _build_model(Image, defaults, kwargs)
+
+
+def build_comment(**kwargs):
+    defaults = {
+        'body': faker.text(),
+        'post': build_post(),
+        'user': build_user(),
+    }
+    return _build_model(Comment, defaults, kwargs)
