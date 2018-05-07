@@ -4,13 +4,14 @@
 {% if title %}
 <h1>{{ title }}</h1>
 {% endif %}
-<ul class="unstyled-list">
+<ul class="unstyled-list separated-list">
 {% for post in posts %}
-<li class="card">
+<li>
   <div class="flex">
-    <h3 class="unmargined mr-1"><a href="{{ url_for('posts.show', slug=post.slug) }}" class="unstyled-link">{{ post.title }}</a></h3>
+    <h3 class="unmargined mr-half"><a href="{{ url_for('posts.show', slug=post.slug) }}" class="unstyled-link">{{ post.title }}</a></h3>
     <small>by {{ post.author_name }}</small>
   </div>
+  <p><small>published {{ post.published_at|publish_time }}</small></p>
   {{ post.summary }}
   <p class="mb-0"><a href="{{ url_for('posts.show', slug=post.slug) }}">Read more</a></p>
 </li>

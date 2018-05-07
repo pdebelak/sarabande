@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from sarabande.models import Post, Tag
 
 from factories import build_post, build_user
@@ -17,6 +19,32 @@ class TestPostViews(AppTest):
         self.assertTrue(post2.title.encode('utf-8') in resp.data)
         self.assertTrue(b'/posts/' + post1.slug.encode('utf-8') in resp.data)
         self.assertTrue(b'/posts/' + post2.slug.encode('utf-8') in resp.data)
+
+    def testPostIndexExcludesUnpublishedPosts(self):
+        post1 = build_post()
+        post2 = build_post(published_at=None)
+        post1_title = post1.title
+        post2_title = post2.title
+        self.db.session.add(post1)
+        self.db.session.add(post2)
+        self.db.session.commit()
+        resp = self.app.get('/posts')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(post1_title.encode('utf-8') in resp.data)
+        self.assertFalse(post2_title.encode('utf-8') in resp.data)
+
+    def testPostIndexExcludesFuturePublishedPosts(self):
+        post1 = build_post()
+        post2 = build_post(published_at=datetime.utcnow() + timedelta(days=10))
+        post1_title = post1.title
+        post2_title = post2.title
+        self.db.session.add(post1)
+        self.db.session.add(post2)
+        self.db.session.commit()
+        resp = self.app.get('/posts')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(post1_title.encode('utf-8') in resp.data)
+        self.assertFalse(post2_title.encode('utf-8') in resp.data)
 
     def testPostShowNotFound(self):
         resp = self.app.get('/posts/not-found')
@@ -38,6 +66,35 @@ class TestPostViews(AppTest):
         self.db.session.commit()
         resp = self.app.get('/posts/' + post.slug)
         self.assertTrue(post.body.encode('utf-8') in resp.data)
+
+    def testPostShowUnpublished(self):
+        post = build_post(published_at=None)
+        self.db.session.add(post)
+        self.db.session.commit()
+        resp = self.app.get('/posts/' + post.slug)
+        self.assertEqual(resp.status_code, 404)
+
+    def testPostShowUnpublishedAuthor(self):
+        post = build_post(published_at=None)
+        slug = post.slug
+        user = post.user
+        self.db.session.add(post)
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug)
+        self.assertEqual(resp.status_code, 200)
+
+    def testPostShowUnpublishedAdmin(self):
+        post = build_post(published_at=None)
+        slug = post.slug
+        user = build_user(user_type='admin')
+        self.db.session.add(post)
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/posts/' + slug)
+        self.assertEqual(resp.status_code, 200)
 
     def testPostNewNotLoggedIn(self):
         resp = self.app.get('/posts/new')
@@ -150,6 +207,35 @@ class TestPostViews(AppTest):
         self.assertEqual(len(tags), 2)
         for tag in tags:
             self.assertEqual(tag.posts[0].id, post.id)
+
+    def testPostCreatePublishing(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts',
+            data={'title': 'My post', 'body': 'Posting it', 'published': True})
+        self.assert_redirected(resp, '/posts/my-post')
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        self.assertTrue(post.published)
+        self.assertTrue(post.published_at)
+        diff = datetime.utcnow() - post.published_at
+        self.assertTrue(diff < timedelta(minutes=1))
+
+    def testPostCreateSpecificTimePublishing(self):
+        user = build_user(user_type='user')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.post(
+            '/posts',
+            data={'title': 'My post', 'body': 'Posting it',
+                  'published_at': '2017-06-01T08:30'})
+        self.assert_redirected(resp, '/posts/my-post')
+        post = Post.query.filter(Post.slug == 'my-post').first()
+        self.assertTrue(post.published)
+        self.assertEqual(post.published_at, datetime(2017, 6, 1, 8, 30))
 
     def testPostEditAsCommenter(self):
         user = build_user(user_type='commenter')
@@ -297,6 +383,44 @@ class TestPostViews(AppTest):
         new_post = Post.query.filter(Post.slug == slug).first()
         self.assertEqual(len(new_post.tags), 2)
         self.assertEqual(new_post.tag_names, 'Second tag, New tag')
+
+    def testPostUpdatePublishing(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user, published_at=None)
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': 'New title', 'body': post.body, 'slug': post.slug,
+                  'published': True})
+        self.assert_redirected(resp, '/posts/' + post.slug)
+        new_post = Post.query.filter(Post.slug == slug).first()
+        self.assertTrue(new_post.published)
+        self.assertTrue(new_post.published_at)
+        diff = datetime.utcnow() - new_post.published_at
+        self.assertTrue(diff < timedelta(minutes=1))
+
+    def testPostUpdatePublishingSpecificTime(self):
+        user = build_user(user_type='user')
+        post = build_post(user=user, published_at=None)
+        slug = post.slug
+        self.db.session.add(user)
+        self.db.session.add(post)
+        self.db.session.commit()
+        self.login_user(user)
+        post = Post.query.filter(Post.slug == slug).first()
+        resp = self.app.post(
+            '/posts/' + slug,
+            data={'title': 'New title', 'body': post.body, 'slug': post.slug,
+                  'published_at': '2017-06-01T08:30'})
+        self.assert_redirected(resp, '/posts/' + post.slug)
+        new_post = Post.query.filter(Post.slug == post.slug).first()
+        self.assertTrue(new_post.published)
+        self.assertEqual(new_post.published_at, datetime(2017, 6, 1, 8, 30))
 
     def testPostDelete(self):
         user = build_user(user_type='user')

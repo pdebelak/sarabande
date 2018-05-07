@@ -1,6 +1,13 @@
 {% macro render_field(field, autofocus=False) %}
+  {% if field.type == "BooleanField" %}
+  <p>{{ field(autofocus=autofocus)|safe }} {{ field.label }}</p>
+  {% elif field.type == "DateTimeField" %}
+  <p>{{ field.label }}</p>
+  <p>{{ field(class='input', type='datetime-local', autofocus=autofocus)|safe }}</p>
+  {% else %}
   <p>{{ field.label }}</p>
   <p>{{ field(class='input', autofocus=autofocus)|safe }}</p>
+  {% endif %}
   {% if field.errors %}
     <ul class=errors>
       {% for error in field.errors %}

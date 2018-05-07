@@ -1,7 +1,8 @@
-from flask import render_template, redirect, url_for, flash
+from datetime import datetime
+
+from flask import render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import joinedload
 
 from sarabande import db, login_manager
 from sarabande.posts import posts
@@ -12,14 +13,17 @@ from .form import PostForm
 
 @posts.route('/posts', methods=['GET'])
 def index():
-    posts = Post.query.all()
+    posts = Post.query.filter(Post.published).order_by(
+        Post.published_at.desc()).all()
     return render_template('posts_index.html', posts=posts)
 
 
 @posts.route('/posts/<slug>', methods=['GET'])
 def show(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
-    return render_template('posts_show.html', post=post)
+    if post.published or post.can_edit(current_user):
+        return render_template('posts_show.html', post=post)
+    abort(404)
 
 
 @posts.route('/posts/new', methods=['GET'])
