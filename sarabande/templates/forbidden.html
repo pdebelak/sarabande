@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}Unauthorized{% endblock %}
+{% block body %}
+<h1>Unauthorized</h1>
+<p>You are not authorized to view this page.</p>
+<p>Perhaps you need to <a href="{{ url_for('sessions.login_form', return_to=request.path) }}">login</a> or <a href="{{ url_for('users.new', return_to=request.path) }}">sign up</a>?</p>
+{% endblock %}
