@@ -1,5 +1,9 @@
 import 'normalize.css';
+import Turbolinks from 'turbolinks';
 
 import closeButton from './closeButton';
+import onload from './onload';
 
-closeButton();
+Turbolinks.start();
+
+onload(closeButton);

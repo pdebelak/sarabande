@@ -15,13 +15,13 @@ class TestAssets(unittest.TestCase):
         asset_tag = self.app.jinja_env.globals['asset_tag']
         self.assertEqual(
             asset_tag('app.css'),
-            '<link rel="stylesheet" type="text/css" href="http://localhost:5001/app.css">')
+            '<link rel="stylesheet" type="text/css" href="http://localhost:5001/app.css" data-turbolinks-track="reload">')
         self.assertEqual(
             asset_tag('app.js'),
-            '<script src="http://localhost:5001/app.js" async="async"></script>')
+            '<script src="http://localhost:5001/app.js" defer data-turbolinks-track="reload"></script>')
         self.assertEqual(
-            asset_tag('nested/index.js', async=False),
-            '<script src="http://localhost:5001/nested/index.js" async="False"></script>')
+            asset_tag('nested/index.js'),
+            '<script src="http://localhost:5001/nested/index.js" defer data-turbolinks-track="reload"></script>')
         with self.assertRaises(
                 RuntimeError, msg='Unknown extension .png'):
             asset_tag('image.png')
@@ -33,10 +33,10 @@ class TestAssets(unittest.TestCase):
         asset_tag = self.app.jinja_env.globals['asset_tag']
         self.assertEqual(
             asset_tag('app.css'),
-            '<link rel="stylesheet" type="text/css" href="/static/app.somehash.css">')
+            '<link rel="stylesheet" type="text/css" href="/static/app.somehash.css" data-turbolinks-track="reload">')
         self.assertEqual(
             asset_tag('app.js'),
-            '<script src="/static/app.somehash.js" async="async"></script>')
+            '<script src="/static/app.somehash.js" defer data-turbolinks-track="reload"></script>')
         with self.assertRaises(
                 RuntimeError, msg='No manifest entry for nested/index.js'):
             asset_tag('nested/index.js')
@@ -57,10 +57,10 @@ class TestAssets(unittest.TestCase):
         theme_asset = self.app.jinja_env.globals['theme_asset']
         self.assertEqual(
             theme_asset('css'),
-            '<link rel="stylesheet" type="text/css" href="/static/dark.somehash.css">')
+            '<link rel="stylesheet" type="text/css" href="/static/dark.somehash.css" data-turbolinks-track="reload">')
         self.assertEqual(
             theme_asset('js'),
-            '<script src="/static/dark.somehash.js" async="async"></script>')
+            '<script src="/static/dark.somehash.js" defer data-turbolinks-track="reload"></script>')
 
     def test_theme_not_specified(self):
         manifest_path = 'tests/resources/manifest.json'
@@ -69,7 +69,7 @@ class TestAssets(unittest.TestCase):
         theme_asset = self.app.jinja_env.globals['theme_asset']
         self.assertEqual(
             theme_asset('css'),
-            '<link rel="stylesheet" type="text/css" href="/static/light.somehash.css">')
+            '<link rel="stylesheet" type="text/css" href="/static/light.somehash.css" data-turbolinks-track="reload">')
         self.assertEqual(
             theme_asset('js'),
-            '<script src="/static/light.somehash.js" async="async"></script>')
+            '<script src="/static/light.somehash.js" defer data-turbolinks-track="reload"></script>')

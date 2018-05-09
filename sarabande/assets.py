@@ -5,15 +5,15 @@ from markupsafe import Markup
 
 
 def _asset_tag_with_lookup(url_for):
-    def asset_tag(filename, async='async'):
+    def asset_tag(filename):
         _, extension = os.path.splitext(filename)
         if extension == '.js':
             return Markup(
-                '<script src="{url}" async="{async}"></script>'.format(
-                    url=url_for(filename), async=async))
+                '<script src="{url}" defer data-turbolinks-track="reload"></script>'.format(
+                    url=url_for(filename)))
         elif extension == '.css':
             return Markup(
-                '<link rel="stylesheet" type="text/css" href="{url}">'.format(
+                '<link rel="stylesheet" type="text/css" href="{url}" data-turbolinks-track="reload">'.format(
                     url=url_for(filename)))
         else:
             raise RuntimeError('Unknown extension {0}'.format(extension))

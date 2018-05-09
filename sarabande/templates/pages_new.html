@@ -2,6 +2,9 @@
 {% from "_form.html" import render_field %}
 {% extends "admin_layout.html" %}
 {% block title %}Create Page{% endblock %}
+{% block head %}
+{{ asset_tag('admin.js') }}
+{% endblock %}
 {% block body %}
 {{ super() }}
 <h1>Create new page</h1>
@@ -13,5 +16,4 @@
   {{ render_field(form.body) }}
   <button class="button button--primary">Submit</button>
 </form>
-{{ asset_tag('admin.js') }}
 {% endblock %}
