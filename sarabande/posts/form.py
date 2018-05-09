@@ -5,7 +5,7 @@ from wtforms import StringField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired, Optional
 from wtforms.ext.dateutil.fields import DateTimeField
 
-from sarabande.models import Post, Tag
+from sarabande.models import Post, Tag, Comment
 
 
 class PostForm(FlaskForm):
@@ -56,3 +56,14 @@ class PostForm(FlaskForm):
         if self.published.data:
             return datetime.utcnow()
         return None
+
+
+class CommentForm(FlaskForm):
+    body = TextAreaField('Body', validators=[DataRequired()])
+
+    def to_comment(self, user=None, post=None):
+        return Comment(
+            body=self.body.data,
+            user=user,
+            post=post,
+        )

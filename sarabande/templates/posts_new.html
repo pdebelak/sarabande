@@ -1,7 +1,9 @@
+{% set active = 'posts' %}
 {% from "_form.html" import render_field %}
-{% extends "layout.html" %}
+{% extends "admin_layout.html" %}
 {% block title %}Create Post{% endblock %}
 {% block body %}
+{{ super() }}
 <h1>Create new post</h1>
 
 <form method="POST" action="{{ url_for('posts.create') }}">

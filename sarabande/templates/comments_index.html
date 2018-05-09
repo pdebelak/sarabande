@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Comments for {{ post.title }}{% endblock %}
+{% block body %}
+<h1>Comments for <a href="{{ url_for('posts.show', slug=post.slug) }}">{{ post.title }}</a></h1>
+<ul class="unstyled-list separated-list">
+{% for comment in comments %}
+  <li>
+    <p>{{ comment.updated_at|comment_time }}</p>
+    <p>{{ comment.author_name }}</p>
+    <p>{{ comment.html_body }}</p>
+  </li>
+{% endfor %}
+</ul>
+<p><a href="{{ url_for('posts.comments_new', slug=post.slug) }}">Add your comment</a></p>
+{% endblock %}

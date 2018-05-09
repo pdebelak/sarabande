@@ -10,3 +10,8 @@ def publish_time(pt, format='short'):
     if format == 'long':
         return pt.strftime('%Y-%m-%d %H:%M')
     raise RuntimeError('Unknown format {0}'.format(format))
+
+
+@app.template_filter('comment_time')
+def comment_time(ct):
+    return ct.strftime('%b %-d, %Y %H:%M')

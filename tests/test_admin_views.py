@@ -1,4 +1,4 @@
-from factories import build_page, build_user, build_post
+from factories import build_page, build_user, build_post, build_comment
 from helpers import AppTest
 
 
@@ -76,8 +76,6 @@ class TestAdminViews(AppTest):
         other_user = build_user(user_type='user')
         username = user.username
         other_username = other_user.username
-        page = build_page()
-        page_title = page.title
         self.db.session.add(user)
         self.db.session.add(other_user)
         self.db.session.commit()
@@ -86,3 +84,31 @@ class TestAdminViews(AppTest):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(username.encode('utf-8') in resp.data)
         self.assertTrue(other_username.encode('utf-8') in resp.data)
+
+    def testCommentsCommenter(self):
+        user = build_user(user_type='commenter')
+        self.db.session.add(user)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/admin/comments')
+        self.assertEqual(resp.status_code, 401)
+
+    def testCommentsUser(self):
+        user = build_user(user_type='user')
+        comment = build_comment()
+        other_comment = build_comment()
+        comment_body = comment.html_body
+        comment_author = comment.author_name
+        other_comment_body = other_comment.html_body
+        other_comment_author = other_comment.author_name
+        self.db.session.add(user)
+        self.db.session.add(comment)
+        self.db.session.add(other_comment)
+        self.db.session.commit()
+        self.login_user(user)
+        resp = self.app.get('/admin/comments')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(comment_body.encode('utf-8') in resp.data)
+        self.assertTrue(comment_author.encode('utf-8') in resp.data)
+        self.assertTrue(other_comment_body.encode('utf-8') in resp.data)
+        self.assertTrue(other_comment_author.encode('utf-8') in resp.data)
