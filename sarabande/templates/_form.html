@@ -9,9 +9,9 @@
   <p>{{ field(class='input', autofocus=autofocus)|safe }}</p>
   {% endif %}
   {% if field.errors %}
-    <ul class=errors>
+    <ul class="unstyled-list">
       {% for error in field.errors %}
-      <li>{{ error }}</li>
+      <li class="text-warning">{{ error }}</li>
       {% endfor %}
     </ul>
   {% endif %}

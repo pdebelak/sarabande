@@ -17,6 +17,11 @@ class TestSessionViews(AppTest):
         self.assert_redirected(resp, '/')
         self.assert_flashes('You are already logged in', 'error')
 
+    def testNewSessionWithReturnToParam(self):
+        resp = self.app.get('/sessions/new?return_to=%2Fposts')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(b'/sessions?return_to=%2Fposts' in resp.data)
+
     def testLoginValidData(self):
         password = 'testpassword'
         user = build_user(password=password)
@@ -29,6 +34,26 @@ class TestSessionViews(AppTest):
         self.assert_flashes('You are logged in!', 'success')
         with self.app.session_transaction() as sess:
             self.assertEqual(sess['user_id'], str(user.id))
+
+    def testLoginWithReturnTo(self):
+        password = 'testpassword'
+        user = build_user(password=password)
+        self.db.session.add(user)
+        self.db.session.commit()
+        resp = self.app.post(
+            '/sessions?return_to=%2Fposts',
+            data={'username': user.username, 'password': password})
+        self.assert_redirected(resp, '/posts')
+
+    def testLoginWithExternalReturnTo(self):
+        password = 'testpassword'
+        user = build_user(password=password)
+        self.db.session.add(user)
+        self.db.session.commit()
+        resp = self.app.post(
+            '/sessions?return_to=https%3A%2F%2Fwww%2Egoogle%2Ecom',
+            data={'username': user.username, 'password': password})
+        self.assert_redirected(resp, '/')
 
     def testLoginNoPassword(self):
         user = build_user()

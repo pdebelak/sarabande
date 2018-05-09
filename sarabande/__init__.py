@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 
 from .assets import Assets
 from .config import Config, BaseModel
+from .helpers import safe_return_to
 
 
 app = Flask(__name__)
