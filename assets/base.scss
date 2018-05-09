@@ -261,3 +261,8 @@ a.text-background:hover, button.text-background:hover {
     border-bottom: 0;
   }
 }
+
+.turbolinks-progress-bar {
+  height: 5px;
+  background-color: $success;
+}

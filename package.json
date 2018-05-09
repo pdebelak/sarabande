@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^10.0.0",
-    "normalize.css": "^8.0.0"
+    "normalize.css": "^8.0.0",
+    "turbolinks": "^5.1.1"
   }
 }

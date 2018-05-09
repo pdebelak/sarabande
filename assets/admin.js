@@ -1,3 +1,4 @@
 import initEditor from './editor';
+import onload from './onload';
 
-initEditor('textarea');
+onload(() => initEditor('textarea'));

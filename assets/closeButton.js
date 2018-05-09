@@ -1,7 +1,7 @@
 function addCloseButton(element) {
   const closeButton = document.createElement('span');
   closeButton.className = 'close-button ' + element.className;
-  closeButton.addEventListener('click', function() {
+  closeButton.addEventListener('click', () => {
     const parent = closeButton.parentNode;
     parent.parentNode.removeChild(parent);
   });
