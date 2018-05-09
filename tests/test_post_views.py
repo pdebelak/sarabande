@@ -548,3 +548,27 @@ class TestPostViews(AppTest):
         comment = Comment.query.first()
         self.assertIsNone(comment)
         self.assertTrue(b'This field is required.' in resp.data)
+
+    def testDeleteCommentCommenter(self):
+        user = build_user(user_type='commenter')
+        comment = build_comment()
+        self.db.session.add(user)
+        self.db.session.add(comment)
+        self.db.session.commit()
+        comment_id = comment.id
+        self.login_user(user)
+        resp = self.app.post('/comments/' + str(comment_id) + '/destroy')
+        self.assertEqual(resp.status_code, 401)
+
+    def testDeleteCommentUser(self):
+        user = build_user(user_type='user')
+        comment = build_comment()
+        self.db.session.add(user)
+        self.db.session.add(comment)
+        self.db.session.commit()
+        comment_id = comment.id
+        self.login_user(user)
+        resp = self.app.post('/comments/' + str(comment_id) + '/destroy')
+        self.assert_redirected(resp, '/admin/comments')
+        comment = Comment.query.filter(Comment.id == comment_id).first()
+        self.assertIsNone(comment)

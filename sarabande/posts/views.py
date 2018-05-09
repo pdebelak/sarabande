@@ -1,10 +1,12 @@
+from operator import attrgetter
+
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
 from sarabande import db, login_manager
 from sarabande.posts import posts
-from sarabande.models import Post
+from sarabande.models import Post, Comment
 from sarabande.sessions import login_required
 from .form import PostForm, CommentForm
 
@@ -92,7 +94,8 @@ def destroy(slug):
 @posts.route('/posts/<slug>/comments', methods=['GET'])
 def comments_index(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
-    return render_template('comments_index.html', post=post)
+    comments = sorted(post.comments, key=attrgetter('updated_at'))
+    return render_template('comments_index.html', post=post, comments=comments)
 
 
 @posts.route('/posts/<slug>/comments/new', methods=['GET'])
@@ -114,3 +117,13 @@ def comments_create(slug):
         db.session.commit()
         return redirect(url_for('posts.comments_index', slug=slug))
     return render_template('comments_new.html', form=form, post=post)
+
+
+@posts.route('/comments/<int:id>/destroy', methods=['POST'])
+@login_required('user')
+def comments_destroy(id):
+    comment = Comment.query.get_or_404(id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Comment deleted', 'success')
+    return redirect(url_for('admin.comments'))

@@ -1,0 +1,21 @@
+{% set active = 'comments' %}
+{% extends "admin_layout.html" %}
+{% block body %}
+{{ super() }}
+<ul class="unstyled-list separated-list">
+{% for comment in comments %}
+<li>
+  <div class="flex space-between">
+    <p>from {{ comment.author_name }} on <a href="{{ url_for('posts.show', slug=comment.post.slug) }}">{{ comment.post.title }}</a> at {{ comment.updated_at|comment_time }}</p>
+    <div class="flex">
+      <form action="{{ url_for('posts.comments_destroy', id=comment.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button class="button button--warning">Delete</button>
+      </form>
+    </div>
+  </div>
+  <p>{{ comment.html_body }}</p>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

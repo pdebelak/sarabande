@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from sarabande.admin import admin
 from sarabande.sessions import login_required
-from sarabande.models import Post, Page, User
+from sarabande.models import Post, Page, User, Comment
 
 
 @admin.route('/admin')
@@ -14,6 +14,13 @@ def posts():
     else:
         posts = current_user.posts
     return render_template('admin_posts.html', posts=posts)
+
+
+@admin.route('/admin/comments')
+@login_required('user')
+def comments():
+    comments = Comment.query.all()
+    return render_template('admin_comments.html', comments=comments)
 
 
 @admin.route('/admin/pages')
