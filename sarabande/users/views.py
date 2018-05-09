@@ -2,7 +2,7 @@ from flask import render_template, redirect, flash
 from flask_login import current_user, login_user
 from sqlalchemy.exc import IntegrityError
 
-from sarabande import db, login_manager
+from sarabande import db, login_manager, safe_return_to
 from sarabande.users import users
 from sarabande.sessions import login_required
 from sarabande.models import User
@@ -26,7 +26,7 @@ def create():
             if not current_user.is_authenticated:
                 login_user(user)
             flash('Account created!', 'success')
-            return redirect('/')
+            return redirect(safe_return_to())
         except IntegrityError:
             db.session.rollback()
             form.username.errors.append('This name has been taken.')

@@ -64,8 +64,8 @@
       <div class="flex container space-between">
         <ul class="unstyled-list flex">
           {% if not current_user.is_authenticated %}
-          <li class="mr-1"><a href="{{ url_for('users.new') }}" class="unstyled-link text-background">Sign Up</a></li>
-          <li class="mr-1"><a href="{{ url_for('sessions.login_form') }}" class="unstyled-link text-background">Login</a></li>
+          <li class="mr-1"><a href="{{ url_for('users.new', return_to=request.path) }}" class="unstyled-link text-background">Sign Up</a></li>
+          <li class="mr-1"><a href="{{ url_for('sessions.login_form', return_to=request.path) }}" class="unstyled-link text-background">Login</a></li>
           {% endif %}
         </ul>
         {% if config.COPYRIGHT %}

@@ -4,7 +4,7 @@
 {% block body %}
 <h1>Login</h1>
 
-<form method="POST" action="{{ url_for('sessions.login') }}">
+<form method="POST" action="{{ url_for('sessions.login', return_to=request.args.get('return_to')) }}">
   {{ form.csrf_token }}
   {{ render_field(form.username, autofocus=True) }}
   {{ render_field(form.password) }}

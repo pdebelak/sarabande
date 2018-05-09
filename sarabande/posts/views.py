@@ -94,16 +94,8 @@ def destroy(slug):
 @posts.route('/posts/<slug>/comments', methods=['GET'])
 def comments_index(slug):
     post = Post.query.filter(Post.slug == slug).first_or_404()
-    comments = sorted(post.comments, key=attrgetter('updated_at'))
-    return render_template('comments_index.html', post=post, comments=comments)
-
-
-@posts.route('/posts/<slug>/comments/new', methods=['GET'])
-@login_required()
-def comments_new(slug):
-    post = Post.query.filter(Post.slug == slug).first_or_404()
-    form = CommentForm()
-    return render_template('comments_new.html', form=form, post=post)
+    form = PostForm()
+    return render_template('comments_index.html', post=post, form=form)
 
 
 @posts.route('/posts/<slug>/comments', methods=['POST'])
@@ -116,7 +108,7 @@ def comments_create(slug):
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for('posts.comments_index', slug=slug))
-    return render_template('comments_new.html', form=form, post=post)
+    return render_template('comments_index.html', form=form, post=post)
 
 
 @posts.route('/comments/<int:id>/destroy', methods=['POST'])

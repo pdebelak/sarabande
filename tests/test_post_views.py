@@ -447,14 +447,6 @@ class TestPostViews(AppTest):
         resp = self.app.post('/posts/' + slug + '/destroy')
         self.assertEqual(resp.status_code, 401)
 
-    def testPostCommentNewNotLoggedIn(self):
-        post = build_post()
-        slug = post.slug
-        self.db.session.add(post)
-        self.db.session.commit()
-        resp = self.app.get('/posts/' + slug + '/comments/new')
-        self.assertEqual(resp.status_code, 401)
-
     def testPostCommentIndex(self):
         comment = build_comment()
         other_comment = build_comment(post=comment.post)
@@ -487,19 +479,6 @@ class TestPostViews(AppTest):
         self.assertTrue(
             b'<a href="http://google.com">google.com</a> rules! &lt;script&gt;alert(&#34;hacks&#34;)&lt;/script&gt;'
             in resp.data)
-
-    def testPostCommentNew(self):
-        post = build_post()
-        user = build_user(user_type='commenter')
-        slug = post.slug
-        title = post.title
-        self.db.session.add(post)
-        self.db.session.add(user)
-        self.db.session.commit()
-        self.login_user(user)
-        resp = self.app.get('/posts/' + slug + '/comments/new')
-        self.assertEqual(resp.status_code, 200)
-        self.assertTrue(b'Comment on ' + title.encode('utf-8') in resp.data)
 
     def testPostCommentNotLoggedIn(self):
         post = build_post()

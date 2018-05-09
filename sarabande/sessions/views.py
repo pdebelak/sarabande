@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect
 from flask_login import login_user, logout_user, current_user
 
+from sarabande import safe_return_to
 from sarabande.sessions import sessions, login_required
 from .form import LoginForm
 
@@ -20,7 +21,7 @@ def login():
     if form.validate():
         login_user(form.user)
         flash('You are logged in!', 'success')
-        return redirect('/')
+        return redirect(safe_return_to())
     return render_template('sessions_new.html', form=form)
 
 

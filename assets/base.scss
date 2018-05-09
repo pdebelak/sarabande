@@ -32,6 +32,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
   padding: 0 0.5em;
   max-width: 45em;
+  box-sizing: border-box;
 }
 
 .bg--primary {
@@ -63,6 +64,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.5em;
   border-radius: 0.25em;
   border: 1px solid #aaa;
+  box-sizing: border-box;
 
 }
 
@@ -247,6 +249,10 @@ a.text-background:hover, button.text-background:hover {
 
 .text-light-background {
   color: $light-background;
+}
+
+.text-warning {
+  color: $warning;
 }
 
 .center {
