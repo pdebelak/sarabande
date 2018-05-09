@@ -1,5 +1,5 @@
 from flask import render_template, redirect, flash
-from flask_login import current_user
+from flask_login import current_user, login_user
 from sqlalchemy.exc import IntegrityError
 
 from sarabande import db, login_manager
@@ -23,6 +23,8 @@ def create():
         try:
             db.session.add(user)
             db.session.commit()
+            if not current_user.is_authenticated:
+                login_user(user)
             flash('Account created!', 'success')
             return redirect('/')
         except IntegrityError:

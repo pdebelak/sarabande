@@ -1,7 +1,9 @@
+{% set active = 'pages' %}
 {% from "_form.html" import render_field %}
-{% extends "layout.html" %}
+{% extends "admin_layout.html" %}
 {% block title %}Create Page{% endblock %}
 {% block body %}
+{{ super() }}
 <h1>Create new page</h1>
 
 <form method="POST" action="{{ url_for('page.create') }}">

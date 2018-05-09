@@ -2,8 +2,8 @@
 {% block title %}{{ post.title }}{% endblock %}
 {% block body %}
 <h1>{{ post.title }}</h1>
-<p>by {{ post.author_name }}</p>
-<p>published {{ post.published_at|publish_time }}</p>
+<p><small>by {{ post.author_name }}</small></p>
+<p><small>published {{ post.published_at|publish_time }}</small></p>
 {{ post.html_body }}
 {% if post.tags %}
 <section class="flex">

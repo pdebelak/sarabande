@@ -1,7 +1,9 @@
+{% set active = 'posts' %}
 {% from "_form.html" import render_field %}
-{% extends "layout.html" %}
+{% extends "admin_layout.html" %}
 {% block title %}Edit {{ form.title.data }}{% endblock %}
 {% block body %}
+{{ super() }}
 <h1>Edit {{ form.title.data }}</h1>
 
 <form method="POST" action="{{ url_for('posts.update', slug=form.slug.data) }}">

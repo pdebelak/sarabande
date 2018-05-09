@@ -20,7 +20,7 @@ class Comment(db.Model):
 
     @property
     def author_name(self):
-        return self.user.name
+        return self.user.username
 
     @property
     def html_body(self):

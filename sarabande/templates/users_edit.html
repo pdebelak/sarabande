@@ -1,7 +1,13 @@
 {% from "_form.html" import render_field %}
-{% extends "layout.html" %}
+{% if current_user.is_authenticated and current_user.is_admin %}
+  {% set active = 'users' %}
+  {% extends "admin_layout.html" %}
+{% else %}
+  {% extends "layout.html" %}
+{% endif %}
 {% block title %}Edit {{ form.username.data }}{% endblock %}
 {% block body %}
+{{ super() }}
 <h1>Edit {{ form.username.data }}</h1>
 
 <form method="POST" action="{{ url_for('users.update', id=user.id) }}">

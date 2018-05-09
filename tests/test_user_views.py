@@ -17,6 +17,8 @@ class TestUserViews(AppTest):
         user = User.query.filter(User.username == 'me').first()
         self.assertTrue(user.valid_password('test'))
         self.assertEqual(user.user_type, 'commenter')
+        with self.app.session_transaction() as sess:
+            self.assertTrue(sess['user_id'])
 
     def testUserCreateDuplicateUsername(self):
         user = build_user()
@@ -62,6 +64,7 @@ class TestUserViews(AppTest):
         user = build_user(user_type='admin')
         self.db.session.add(user)
         self.db.session.commit()
+        user_id = user.id
         self.login_user(user)
         resp = self.app.post(
             '/account',
@@ -70,6 +73,8 @@ class TestUserViews(AppTest):
         user = User.query.filter(User.username == 'me').first()
         self.assertTrue(user.valid_password('test'))
         self.assertEqual(user.user_type, 'user')
+        with self.app.session_transaction() as sess:
+            self.assertEqual(sess['user_id'], str(user_id))
 
     def testUserEditSelf(self):
         user = build_user(user_type='commenter')
