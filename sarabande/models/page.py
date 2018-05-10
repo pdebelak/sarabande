@@ -1,10 +1,8 @@
-from markupsafe import Markup
-from slugify import slugify
-
 from sarabande import db
+from .cms_model import CMSModel
 
 
-class Page(db.Model):
+class Page(db.Model, CMSModel):
     __tablename__ = 'pages'
 
     title = db.Column(db.String, nullable=False)
@@ -13,12 +11,8 @@ class Page(db.Model):
 
     def __init__(self, *args, **kwargs):
         if not kwargs.get('slug'):
-            kwargs['slug'] = slugify(kwargs.get('title', ''))
+            kwargs['slug'] = self.slugify(kwargs.get('title', ''))
         super(Page, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return '<Page {title}>'.format(title=self.title)
-
-    @property
-    def html_body(self):
-        return Markup(self.body)

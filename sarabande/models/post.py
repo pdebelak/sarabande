@@ -1,15 +1,13 @@
 from datetime import datetime
 
-from bs4 import BeautifulSoup
-from markupsafe import Markup
-from slugify import slugify
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from sarabande import db
+from .cms_model import CMSModel
 from .posts_tags import posts_tags
 
 
-class Post(db.Model):
+class Post(db.Model, CMSModel):
     __tablename__ = 'posts'
 
     title = db.Column(db.String, nullable=False)
@@ -24,23 +22,15 @@ class Post(db.Model):
 
     def __init__(self, *args, **kwargs):
         if not kwargs.get('slug'):
-            kwargs['slug'] = slugify(kwargs.get('title', ''))
+            kwargs['slug'] = self.slugify(kwargs.get('title'))
         super(Post, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return '<Post {title}>'.format(title=self.title)
 
     @property
-    def html_body(self):
-        return Markup(self.body)
-
-    @property
     def author_name(self):
         return self.user.username
-
-    @property
-    def summary(self):
-        return Markup(BeautifulSoup(self.body, 'html.parser').contents[0])
 
     @property
     def tag_names(self):
