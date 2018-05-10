@@ -27,3 +27,15 @@ class TestPostModel(unittest.TestCase):
     def testSummaryNoPTag(self):
         post = Post(body='Just some garbage in here.')
         self.assertEqual(post.summary, post.body)
+
+    def testDescription(self):
+        post = Post(body='<p>First paragraph!</p><p>Second!</p>')
+        self.assertEqual(post.description, 'First paragraph!')
+
+    def testImageURL(self):
+        post = Post(body='<p>First paragraph!</p><p><img src="/images/wat"></p>')
+        self.assertEqual(post.image_url, '/images/wat')
+
+    def testImageURLNoImage(self):
+        post = Post(body='<p>First paragraph!</p><p>Second!</p>')
+        self.assertIsNone(post.image_url)

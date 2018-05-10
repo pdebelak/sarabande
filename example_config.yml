@@ -1,11 +1,13 @@
 title: Sarabande
-secret_key: 'PLEASE_CHANGE_THIS_NOT_SECURE'
-database_uri: 'sqlite:///sarabande_development.sqlite3'
-home_page: '/posts'
-copyright: '2018 Peter Debelak'
-theme: 'light'
+description: Sample sarabande site
+secret_key: PLEASE_CHANGE_THIS_NOT_SECURE
+database_uri: sqlite:///sarabande_development.sqlite3
+home_page: /posts
+copyright: 2018 Peter Debelak
+theme: light
+twitter_user: '@sarabande'
 nav_links:
   - name: About
-    link: '/about'
+    link: /about
   - name: Contact
-    link: '/contact'
+    link: /contact

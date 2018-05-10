@@ -1,0 +1,19 @@
+{% macro social_tags(shareable) %}
+<meta property="description" content="{{ shareable.description }}">
+<meta property="og:url" content="{{ make_absolute(request.path) }}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ shareable.title }}">
+<meta property="og:description" content="{{ shareable.description }}">
+{% if shareable.image_url %}
+<meta property="og:image" content="{{ make_absolute(shareable.image_url) }}">
+{% endif %}
+{% if config.TWITTER_USER %}
+<meta property="twitter:site" content="{{ config.TWITTER_USER }}">
+{% endif %}
+<meta property="twitter:card" content="summary">
+<meta property="twitter:title" content="{{ shareable.title }}">
+<meta property="twitter:description" content="{{ shareable.description }}">
+{% if shareable.image_url %}
+<meta property="twitter:image" content="{{ make_absolute(shareable.image_url) }}">
+{% endif %}
+{% endmacro %}

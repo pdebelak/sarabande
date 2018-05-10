@@ -1,3 +1,7 @@
+from urllib.parse import urljoin
+
+from flask import request
+
 from sarabande import app
 
 
@@ -15,3 +19,8 @@ def publish_time(pt, format='short'):
 @app.template_filter('comment_time')
 def comment_time(ct):
     return ct.strftime('%b %-d, %Y %H:%M')
+
+
+@app.template_global('make_absolute')
+def make_absolute(path):
+    return urljoin(request.url_root, path)

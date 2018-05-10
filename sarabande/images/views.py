@@ -12,7 +12,7 @@ from .form import ImageForm
 @csrf.exempt
 @login_required('user')
 def create():
-    form = ImageForm()
+    form = ImageForm(meta={'csrf_enabled': False})
     if form.validate():
         image = form.to_image(current_user)
         db.session.add(image)

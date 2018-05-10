@@ -1,5 +1,9 @@
+{% from "_social_media.html" import social_tags %}
 {% extends "layout.html" %}
 {% block title %}{{ post.title }}{% endblock %}
+{% block head %}
+{{ social_tags(post) }}
+{% endblock %}
 {% block body %}
 <h1>{{ post.title }}</h1>
 <p><small>by {{ post.author_name }}</small></p>

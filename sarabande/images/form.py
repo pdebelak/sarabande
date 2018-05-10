@@ -9,9 +9,6 @@ from sarabande.models import Image
 
 
 class ImageForm(FlaskForm):
-    class Meta:
-        csrf_enabled = False
-
     upload = FileField(validators=[FileRequired()])
 
     def to_image(self, user=None):

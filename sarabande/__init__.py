@@ -38,5 +38,5 @@ app.register_blueprint(user_blueprint)
 app.register_blueprint(page_blueprint)
 app.register_blueprint(session_blueprint)
 from .views import license, home_page
-from .filters import publish_time, comment_time
+from .filters import *
 from .errors import *
