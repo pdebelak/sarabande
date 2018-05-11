@@ -1,20 +1,22 @@
 {% extends "layout.html" %}
 {% block title %}Admin{% endblock %}
 {% block body %}
-<ul class="unstyled-list flex tabs">
-  <li class="tab{% if active == 'posts' %} tab--active{% endif %}">
-    <a href="{{ url_for('admin.posts') }}" class="unstyled-link">Posts</a>
-  </li>
-  <li class="tab{% if active == 'comments' %} tab--active{% endif %}">
-    <a href="{{ url_for('admin.comments') }}" class="unstyled-link">Comments</a>
-  </li>
-  {% if current_user.is_admin %}
-  <li class="tab{% if active == 'pages' %} tab--active{% endif %}">
-    <a href="{{ url_for('admin.pages') }}" class="unstyled-link">Pages</a>
-  </li>
-  <li class="tab{% if active == 'users' %} tab--active{% endif %}">
-    <a href="{{ url_for('admin.users') }}" class="unstyled-link">Users</a>
-  </li>
-  {% endif %}
-</ul>
+<div class="horizontal-scroll">
+  <ul class="unstyled-list flex tabs">
+    <li class="tab{% if active == 'posts' %} tab--active{% endif %}">
+      <a href="{{ url_for('admin.posts') }}" class="unstyled-link">Posts</a>
+    </li>
+    <li class="tab{% if active == 'comments' %} tab--active{% endif %}">
+      <a href="{{ url_for('admin.comments') }}" class="unstyled-link">Comments</a>
+    </li>
+    {% if current_user.is_admin %}
+    <li class="tab{% if active == 'pages' %} tab--active{% endif %}">
+      <a href="{{ url_for('admin.pages') }}" class="unstyled-link">Pages</a>
+    </li>
+    <li class="tab{% if active == 'users' %} tab--active{% endif %}">
+      <a href="{{ url_for('admin.users') }}" class="unstyled-link">Users</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
 {% endblock %}
