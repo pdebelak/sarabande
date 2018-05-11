@@ -39,6 +39,29 @@ figure {
   box-sizing: border-box;
 }
 
+%centered-media {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+
+.post-body iframe {
+  @extend %centered-media;
+}
+
+.post-body img {
+  @extend %centered-media;
+  padding: 0.25em;
+  border: 1px solid $light-background;
+  border-radius: 0.25em;
+  background: $lightest-background;
+}
+
+.post-body figure {
+  margin: 1em 0;
+}
+
 .bg--primary {
   background: $primary;
   color: $background;
@@ -224,6 +247,10 @@ select.input {
 
 .mt-1 {
   margin-top: 1em;
+}
+
+.nmt-half {
+  margin-top: -0.5em;
 }
 
 .mt-0 {

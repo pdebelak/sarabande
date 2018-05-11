@@ -24,12 +24,12 @@
       <div class="flex container">
         <h1 class="mr-1"><a href="/" class="unstyled-link text-background">{{ config.TITLE }}</a></h1>
         <nav class="flex space-between flex-grow">
-          <ul class="unstyled-list flex">
+          <ul class="unstyled-list flex nmt-half">
             {% for link in config.NAV_LINKS %}
             <li class="mr-1"><a href="{{ link.link }}" class="unstyled-link text-background">{{ link.name }}</a></li>
             {% endfor %}
           </ul>
-          <ul class="unstyled-list flex">
+          <ul class="unstyled-list flex nmt-half">
             {% if current_user.is_authenticated %}
             {% if current_user.can_post %}
               <li class="mr-1"><a href="{{ url_for('admin.posts') }}" class="unstyled-link text-background">Admin</a></li>

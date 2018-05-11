@@ -8,7 +8,9 @@
 <h1>{{ post.title }}</h1>
 <p><small>by {{ post.author_name }}</small></p>
 <p><small>published {{ post.published_at|publish_time }}</small></p>
+<section class="post-body">
 {{ post.html_body }}
+</section>
 {% if post.tags %}
 <section class="flex">
   {% for tag in post.tags %}
