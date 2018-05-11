@@ -39,3 +39,15 @@ class TestPostModel(unittest.TestCase):
     def testImageURLNoImage(self):
         post = Post(body='<p>First paragraph!</p><p>Second!</p>')
         self.assertIsNone(post.image_url)
+
+    def testHTMLBodyWithRawHTMLMarker(self):
+        post = Post(body='<p>First paragraph!</p><p>===</p>&lt;iframe src="wat"&gt;&lt;/iframe&gt;<p>===</p><p>Second!</p>')
+        self.assertEqual(
+            post.html_body,
+            '<p>First paragraph!</p><iframe src="wat"></iframe><p>Second!</p>')
+
+    def testHTMLBodyWithTwoRawHTMLMarkers(self):
+        post = Post(body='<p>First paragraph!</p><p> ===</p>&lt;iframe src="wat"&gt;&lt;/iframe&gt;<p>===\t</p><p>Second!</p><p>===</p>&lt;strong&gt;test&lt;/strong&gt;<p>===</p><p>Third!</p>')
+        self.assertEqual(
+            post.html_body,
+            '<p>First paragraph!</p><iframe src="wat"></iframe><p>Second!</p><strong>test</strong><p>Third!</p>')
