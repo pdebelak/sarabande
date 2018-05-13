@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
-from flask_compress import Compress
 from flask_migrate import Migrate
 
 from .assets import Assets
@@ -14,7 +13,6 @@ from .helpers import safe_return_to
 app = Flask(__name__)
 app.config.from_object(Config)
 
-Compress(app)
 Assets(app)
 db = SQLAlchemy(app, model_class=BaseModel)
 migrate = Migrate(app, db)

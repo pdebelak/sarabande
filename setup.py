@@ -50,7 +50,6 @@ setup(
         'beautifulsoup4',
         'flask>=0.12',
         'flask-bcrypt',
-        'flask-compress',
         'flask-login',
         'flask-sqlalchemy',
         'flask-wtf',
