@@ -10,15 +10,19 @@ class TestPostViews(AppTest):
     def testPostIndex(self):
         post1 = build_post()
         post2 = build_post()
+        post1_title = post1.title
+        post1_slug = post1.slug
+        post2_title = post2.title
+        post2_slug = post2.slug
         self.db.session.add(post1)
         self.db.session.add(post2)
         self.db.session.commit()
         resp = self.app.get('/posts')
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue(post1.title.encode('utf-8') in resp.data)
-        self.assertTrue(post2.title.encode('utf-8') in resp.data)
-        self.assertTrue(b'/posts/' + post1.slug.encode('utf-8') in resp.data)
-        self.assertTrue(b'/posts/' + post2.slug.encode('utf-8') in resp.data)
+        self.assertTrue(post1_title.encode('utf-8') in resp.data)
+        self.assertTrue(post2_title.encode('utf-8') in resp.data)
+        self.assertTrue(b'/posts/' + post1_slug.encode('utf-8') in resp.data)
+        self.assertTrue(b'/posts/' + post2_slug.encode('utf-8') in resp.data)
 
     def testPostIndexExcludesUnpublishedPosts(self):
         post1 = build_post()

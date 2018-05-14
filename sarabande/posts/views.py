@@ -1,5 +1,3 @@
-from operator import attrgetter
-
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
@@ -13,9 +11,10 @@ from .form import PostForm, CommentForm
 
 @posts.route('/posts', methods=['GET'])
 def index():
-    posts = Post.query.filter(Post.published).order_by(
-        Post.published_at.desc()).all()
-    return render_template('posts_index.html', posts=posts)
+    pagination = Post.query.filter(Post.published).order_by(
+        Post.published_at.desc()).paginate(per_page=5)
+    return render_template('posts_index.html', posts=pagination.items,
+                           pagination=pagination)
 
 
 @posts.route('/posts/<slug>', methods=['GET'])

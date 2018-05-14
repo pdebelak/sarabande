@@ -249,6 +249,7 @@ a.text-background:hover, button.text-background:hover {
 }
 
 .horizontal-scroll {
+  box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -305,4 +306,40 @@ a.text-background:hover, button.text-background:hover {
 
 .tab--active a {
   border-bottom: 1px solid $background;
+}
+
+.pagination {
+  @extend .unstyled-list;
+  @extend .flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+
+  li {
+    border: 1px solid $light-background;
+    border-right: 0;
+    &:first-child {
+      border-radius: 0.25em 0 0 0.25em;
+    }
+    &:last-child {
+      border-radius: 0 0.25em 0.25em 0;
+      border-right: 1px solid $light-background;
+    }
+  }
+
+  li > * {
+    display: block;
+    padding: 0.5em 1em;
+  }
+
+  li > a {
+    text-decoration: none;
+    color: $text-color;
+    &:hover {
+      color: $text-color;
+      background: $light-background;
+    }
+    &:visited {
+      color: $text-color;
+    }
+  }
 }
