@@ -68,7 +68,7 @@ Open http://localhost:5000
 You can create an admin user with:
 
 ```
-$ FLASK_ENV=development venv/bin/sarabande create_admin --config example_config.ytml --username [some username] --password [some_password]
+$ FLASK_ENV=development venv/bin/sarabande --config example_config.yml create_admin --username [some username] --password [some_password]
 ```
 
 Then you can login and start creating pages and posts.

@@ -50,7 +50,7 @@ setup(
         'beautifulsoup4',
         'flask>=0.12',
         'flask-bcrypt',
-        'flask-login',
+        'flask-login<0.5',
         'flask-sqlalchemy',
         'flask-wtf',
         'flask-migrate',
@@ -58,5 +58,6 @@ setup(
         'python-slugify',
         'pyyaml',
         'uwsgi',
+        'wtforms<2.3',
     ]
 )
